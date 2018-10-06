@@ -16,18 +16,11 @@
     }(document, 'script', 'Messenger'));
     window.extAsyncInit = () => {
 
-        MessengerExtensions.getUserID(function success(uids) {
-            var psid = uids.psid;//This is your page scoped sender_id
-            document.getElementById("psid").value = psid;
-        }, function error(err) {
-            alert("Messenger Extension Error: " + err);
-        });
-
         // TODO: How to parse env file from here?
         MessengerExtensions.getSupportedFeatures(function success(result) {
             let features = result.supported_features;
-            if (features.includes("context")) {
-                MessengerExtensions.getContext(472949816547588,
+            //if (features.includes("context")) {
+                MessengerExtensions.getContext("472949816547588",
                     function success(thread_context) {
                         // success
                         document.getElementById("psid").value = thread_context.psid;
@@ -38,7 +31,7 @@
                         console.log(err);
                     }
                 );
-            }
+           // }
         }, function error(err) {
             // error retrieving supported features
             console.log(err);
