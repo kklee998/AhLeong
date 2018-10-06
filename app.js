@@ -159,19 +159,62 @@ function handleMessage(sender_psid, received_message) {
           }
         } else {
           response = {
-                "text": 'Please login to proceed.',
-                "quick_replies":[
-                  {
-                    "content_type":"text",
-                    "title":"Login",
-                    "payload":"LOGIN",
-                  }
-                ]
-              };
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "Please log in to proceed.",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
         }
         //callSendAPI(sender_psid, response);
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
-      response = login(sender_psid);
+      if(checkIfSessionExists(sender_psid)){
+        response = {
+          "text": 'It seems like you have already logged into an account, do you want to log out?',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Logout",
+                  "payload":"LOGOUT",
+                }
+              ]
+            };
+      }else{
+        response = login(sender_psid);
+      }
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/logout|log out|logoff|log off/gi) != null){
+      if(checkIfSessionExists(sender_psid)){
+        logout(sender_psid);
+        response = {
+          "text": 'You have logged out successfully. Thank you.',
+            };
+      }else{
+        response = {
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "You have not logged into any account. Do you mean to log in?",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
+      }
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/atm/gi) != null){
       response = showLocation(); 
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/hi|hai|hello|hey/gi) != null){
@@ -361,4 +404,8 @@ function checkIfSessionExists(sender_psid){
   // });
   return fs.existsSync(sender_psid + '.json');
 
+}
+
+function logout(sender_psid){
+  fs.unlinkSync(sender_psid + '.json');
 }
