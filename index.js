@@ -218,7 +218,7 @@ function reminder(sender_psid) {
     "json": request_body
   }, (err, res, body) => {
     if (!err) {
-      console.log('message sent!')
+      console.log('Reminder sent!')
     } else {
       console.error("Unable to send message:" + err);
     }
