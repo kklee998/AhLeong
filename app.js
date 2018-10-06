@@ -205,6 +205,7 @@ app.get('/webhook', (req, res) => {
 function handleMessage(sender_psid, received_message) {
   let response;
 
+
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
       if(checkIfSessionExists(sender_psid)){
@@ -608,16 +609,20 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
-  var jsonData = require('./' + sender_psid + '-chain.json');
-    //var test = JSON.stringify(jsonData)
-  console.log(jsonData);
-    //console.log(test.table[0].chain);
-  if(jsonData.table[0].chain){
-    return jsonData.table[0].chain;
+  if(existsSync(sender_psid + '-chain.json')){
+    var jsonData = require('./' + sender_psid + '-chain.json');
+      //var test = JSON.stringify(jsonData)
+    console.log(jsonData);
+      //console.log(test.table[0].chain);
+    if(jsonData.table[0].chain){
+      return jsonData.table[0].chain;
+    }else{
+      return '00';
+    }
   }else{
+    logChainNo(sender_psid, '00');
     return '00';
   }
-  
 }
 
 function logChainNo(sender_psid, chain_no){
