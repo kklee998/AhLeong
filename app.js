@@ -272,14 +272,14 @@ function handleMessage(sender_psid, received_message) {
   }
 
   if(readChainNo(sender_psid) == '24'){
-    if(received_message.text.replace(/[^\w\s]/gi, '').trim().match(/^[0-9]+$/) != null){
+    if(received_message.text.trim().match(/^[0-9]+$/) != null){
       response1 = {
-              "text": 'Enter a description for this transaction.'
+        "text": 'Enter a description for this transaction.'
       };
       logChainNo(sender_psid, '25');
     }else{
       response1 = {
-              "text": 'Please enter numbers only.'
+        "text": 'Please enter numbers only.'
       };
       logChainNo(sender_psid, '24');
     }
@@ -296,7 +296,7 @@ function handleMessage(sender_psid, received_message) {
           },
           {
             "content_type":"text",
-            "title":"Cancel",
+            "title":"No",
             "payload":"NO",
           }
         ]
