@@ -122,6 +122,8 @@ function handleMessage(sender_psid, received_message) {
             break;
         case "file":
             response = read_json();
+        case "remind":
+            setTimeout(reminder,30,sender_psid)
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
@@ -195,8 +197,28 @@ function read_json() {
     if (err) throw err;
     let msg = JSON.parse(data);
     console.log(msg);
+  });
+}
 
-    let msg2 = Object.msg2(msg);
-    console.log(msg2[1]);
+function reminder(sender_psid) {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": "THIS IS A REMINDER!!!!"
+  }
+
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
   });
 }
