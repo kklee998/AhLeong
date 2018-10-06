@@ -28,7 +28,7 @@ app.get('/login', (req, res, next) => {
 app.get('/loginpostback', (req, res) => {
     let body = req.query;
     let response;
-    if(${body.username} === 'admin' && ${body.password} === 'admin123'){
+    if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
         "text": 'Login Success!'
       };
