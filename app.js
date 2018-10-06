@@ -25,12 +25,12 @@ app.get('/login', (req, res, next) => {
 });
 
 // Handle postback from webview
-app.get('/loginpostback', (req, res) => {
+app.post('/loginpostback', (req, res) => {
     let body = req.query;
     console.log(body);
     console.log(body.username);
     console.log(body.password);
-    console.log(body.psid);
+    console.log(body.sender_psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
@@ -43,7 +43,7 @@ app.get('/loginpostback', (req, res) => {
     }
 
     res.status(200).send('Please close this window to return to the conversation thread.');
-    callSendAPI(body.psid, response);
+    callSendAPI(body.sender_psid, response);
 });
 
 // Creates the endpoint for our webhook 
