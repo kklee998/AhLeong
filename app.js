@@ -263,7 +263,7 @@ function showLocation(){
             text: "Here are the nearest ATM locations.",
             buttons: [{
                 type: "web_url",
-                url: "https://ahleong-kelvin.herokuapp.com/location",
+                url: "https://www.google.com/maps/search/ATM/@3.1468663,101.6667508,15z/data=!3m1!4b1",
                 title: "Show Locations",
                 webview_height_ratio: "compact",
                 messenger_extensions: true
