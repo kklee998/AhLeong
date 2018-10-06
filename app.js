@@ -28,6 +28,18 @@ app.get('/login', (req, res, next) => {
     }
 });
 
+app.get('/location', (req, res, next) => {
+    let referer = req.get('Referer');
+    if (referer) {
+        if (referer.indexOf('www.messenger.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.messenger.com/');
+        } else if (referer.indexOf('www.facebook.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
+        }
+        res.sendFile('location.html', {root: __dirname});
+    }
+});
+
 // Handle postback from webview
 app.post('/loginpostback', (req, res) => {
     let body = req.body;
@@ -139,7 +151,9 @@ function handleMessage(sender_psid, received_message) {
         //callSendAPI(sender_psid, response);
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
       response = login(sender_psid);
-    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/hi|hai|hello|hey/gi) != null){
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/atm/gi) != null){
+      response = showLocation(); 
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/hi|hai|hello|hey/gi) != null){
       response = {
               "text": 'How can I help you?',
               "quick_replies":[
@@ -238,6 +252,27 @@ function callSendAPI(sender_psid, response) {
       console.error("Unable to send message:" + err);
     }
   });
+}
+
+function showLocation(){
+  let request_body = {
+    attachment: {
+        type: "template",
+        payload: {
+            template_type: "button",
+            text: "Here are the nearest ATM locations.",
+            buttons: [{
+                type: "web_url",
+                url: "https://ahleong-kelvin.herokuapp.com/location",
+                title: "Show Locations",
+                webview_height_ratio: "compact",
+                messenger_extensions: true
+            }]
+        }
+    }
+  };
+
+  return request_body;
 }
 
 function login(sender_psid) {
