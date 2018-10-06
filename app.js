@@ -53,25 +53,47 @@ app.post('/loginpostback', (req, res) => {
       switch(readChainNo(body.psid)){
         case '00':
           response = {
-              "text": 'Hi Admin, how can I help you?',
+              "text": 'Hi Ali, how can I help you?',
               "quick_replies":[
                 {
                   "content_type":"text",
-                  "title":"Quick Balance",
+                  "title":"Check Balance",
                   "payload":"BAL",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Transfer Money",
+                  "payload":"TRANSFER_MONEY",
+                },
+                {
+                  "content_type":"text",
+                  "title":"View Account",
+                  "payload":"VIEW_ACCOUNT",
                 }
               ]
             };
           break;
         case '10':
           response = {
-            "text": 'Hi Admin!'
+            "text": 'Hi Ali!',
+            "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Cancel",
+                  "payload":"CANCEL",
+                }
+              ]
           };
           callSendAPI(body.psid, {"text": "Your balance is 0! So poor!"});
           break;
+        case '21':
+          response = {
+            "text": 'Hi Ali! Who do you want to transfer to?'
+          }
+          break;
         default:
           response = {
-                "text": 'Hi Admin, how can I help you ? ',
+                "text": 'Hi Ali, how can I help you ? ',
                 "quick_replies":[
                   {
                     "content_type":"text",
@@ -231,6 +253,10 @@ function handleMessage(sender_psid, received_message) {
       }
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer|pay/gi) != null){
       if(checkIfSessionExists(sender_psid)){
+        response = {"text": 'Enter recipient name.'};
+        logChainNo(sender_psid, '22');
+      }else{
+        logChainNo(sender_psid, '21');
         response = {
             attachment: {
                 type: "template",
@@ -247,8 +273,6 @@ function handleMessage(sender_psid, received_message) {
                 }
             }
           };
-      }else{
-        response = login(sender_psid);
       }
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/logout|log out|logoff|log off/gi) != null){
       if(checkIfSessionExists(sender_psid)){
@@ -276,6 +300,28 @@ function handleMessage(sender_psid, received_message) {
       }
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/atm/gi) != null){
       response = showLocation(); 
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/cancel/gi) != null){
+      response = {
+              "text": 'Hi Ali, how can I help you?',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Check Balance",
+                  "payload":"BAL",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Transfer Money",
+                  "payload":"TRANSFER_MONEY",
+                },
+                {
+                  "content_type":"text",
+                  "title":"View Account",
+                  "payload":"VIEW_ACCOUNT",
+                }
+              ]
+            };
+      logChainNo(sender_psid, '00');
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/hi|hai|hello|hey/gi) != null){
       response = {
               "text": 'How can I help you?',
@@ -292,6 +338,59 @@ function handleMessage(sender_psid, received_message) {
                 }
               ]
             };
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/yes|yea|yup|sure/gi) != null){
+      if(readChainNo(sender_psid) === '23'){
+        response = {
+                "text": 'How much do you want to transfer?',
+        };
+        logChainNo(sender_psid, '24');
+      } else if(readChainNo(sender_psid) === '26'){
+        response = {
+                "text": 'Alright, the reminder has been set.',
+                "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Check Balance",
+                  "payload":"BAL",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Transfer Money",
+                  "payload":"TRANSFER_MONEY",
+                },
+                {
+                  "content_type":"text",
+                  "title":"View Account",
+                  "payload":"VIEW_ACCOUNT",
+                }
+              ]
+        };
+        logChainNo(sender_psid, '00');
+      }
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/no|nope/gi) != null){
+      if(readChainNo(sender_psid) === '26'){
+        response = {
+                "text": 'Alright, no reminder is set.',
+                "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Check Balance",
+                  "payload":"BAL",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Transfer Money",
+                  "payload":"TRANSFER_MONEY",
+                },
+                {
+                  "content_type":"text",
+                  "title":"View Account",
+                  "payload":"VIEW_ACCOUNT",
+                }
+              ]
+        };
+        logChainNo(sender_psid, '00');
+      }
     } else {
       response = {
         "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
@@ -347,6 +446,82 @@ function handleMessage(sender_psid, received_message) {
   //       "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
   //   }
   // }
+
+  if(readChainNo(sender_psid) === '22'){
+    if(checkIfSessionExists(sender_psid)){
+      let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
+      if(checkIfAccNoExists()){
+        logChainNo(sender_psid, '23');
+        response = {
+              "text": 'Recipient Name: ' + recipent_name + ', ' + 'Account Number: 1293800023983' ,
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Yes",
+                  "payload":"YES",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Cancel",
+                  "payload":"CANCEL",
+                }
+              ]
+            };
+      }
+    }else{
+      logChainNo(sender_psid, '21');
+        response = {
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "Please log in to proceed.",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
+    }
+  }
+
+  if(readChainNo(sender_psid) === '24'){
+    if(string.match(/^[0-9]+$/) != null){
+      response = {
+              "text": 'Enter a description for this transaction.'
+      };
+      logChainNo(sender_psid, '25');
+    }else{
+      response = {
+              "text": 'Please enter numbers only.'
+      };
+      logChainNo(sender_psid, '24');
+    }
+  }
+
+  if(readChainNo(sender_psid) === '25'){
+    response = {
+      "text": 'Do yo want to set a reminder for this transaction?' ,
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Yes",
+            "payload":"YES",
+          },
+          {
+            "content_type":"text",
+            "title":"Cancel",
+            "payload":"NO",
+          }
+        ]
+      };
+  logChainNo(sender_psid, '26');
+  }
+
   callSendAPI(sender_psid, response);
 }
 
@@ -492,4 +667,8 @@ function checkIfSessionExists(sender_psid){
 
 function logout(sender_psid){
   fs.unlinkSync(sender_psid + '.json');
+}
+
+function checkIfAccNoExists(){
+  return true;
 }
