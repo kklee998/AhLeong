@@ -186,7 +186,7 @@ function login(sender_psid) {
 
 function write_json(msg) {
 
-  let data = JSON.stringfy(msg);
+  let data = JSON.stringify(msg);
   fs.writeFileSync('data.json',data);
 }
 
