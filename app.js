@@ -692,7 +692,7 @@ function logChainNo(sender_psid, chain_no){
   var json = JSON.stringify(obj);
 
   //fs = require('fs');
-  fs.writeFileSync(sender_psid + '-chain.json', json);
+  fs.writeFileSync(sender_psid + '-chain.json', {encoding:'utf8',flag:'w'});
 
 }
 
