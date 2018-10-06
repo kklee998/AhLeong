@@ -272,7 +272,7 @@ function handleMessage(sender_psid, received_message) {
   }
 
   if(readChainNo(sender_psid) == '24'){
-    if(string.match(/^[0-9]+$/) != null){
+    if(received_message.text.replace(/[^\w\s]/gi, '').trim().match(/^[0-9]+$/) != null){
       response1 = {
               "text": 'Enter a description for this transaction.'
       };
