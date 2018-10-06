@@ -71,7 +71,7 @@ app.post('/loginpostback', (req, res) => {
           break;
         default:
           response = {
-                "text": 'Hi Admin, how can I help you?',
+                "text": 'Hi Admin, how can I help you ? ',
                 "quick_replies":[
                   {
                     "content_type":"text",
@@ -442,7 +442,7 @@ function login(sender_psid) {
 function readChainNo(sender_psid){
   let rawdata = fs.readFileSync(sender_psid + '-chain.json');  
   let parsedData = JSON.parse(rawdata);  
-  if(parsedData.chain != null){
+  if(parsedData.chain){
     return parsedData.chain;
   }else{
     return '00';
