@@ -339,12 +339,12 @@ function handleMessage(sender_psid, received_message) {
               ]
             };
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/yes|yea|yup|sure/gi) != null){
-      if(readChainNo(sender_psid) === '23'){
+      if(readChainNo(sender_psid) == '23'){
         response = {
                 "text": 'How much do you want to transfer?',
         };
         logChainNo(sender_psid, '24');
-      } else if(readChainNo(sender_psid) === '26'){
+      } else if(readChainNo(sender_psid) == '26'){
         response = {
                 "text": 'Alright, the reminder has been set.',
                 "quick_replies":[
@@ -368,7 +368,7 @@ function handleMessage(sender_psid, received_message) {
         logChainNo(sender_psid, '00');
       }
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/no|nope/gi) != null){
-      if(readChainNo(sender_psid) === '26'){
+      if(readChainNo(sender_psid) == '26'){
         response = {
                 "text": 'Alright, no reminder is set.',
                 "quick_replies":[
@@ -447,7 +447,7 @@ function handleMessage(sender_psid, received_message) {
   //   }
   // }
 
-  if(readChainNo(sender_psid) === '22'){
+  if(readChainNo(sender_psid) == '22'){
     if(checkIfSessionExists(sender_psid)){
       let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
       if(checkIfAccNoExists()){
@@ -489,7 +489,7 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
-  if(readChainNo(sender_psid) === '24'){
+  if(readChainNo(sender_psid) == '24'){
     if(string.match(/^[0-9]+$/) != null){
       response = {
               "text": 'Enter a description for this transaction.'
@@ -503,7 +503,7 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
-  if(readChainNo(sender_psid) === '25'){
+  if(readChainNo(sender_psid) == '25'){
     response = {
       "text": 'Do yo want to set a reminder for this transaction?' ,
         "quick_replies":[
