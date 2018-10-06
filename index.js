@@ -208,7 +208,9 @@ function reminder(sender_psid) {
     "recipient": {
       "id": sender_psid
     },
-    "message": 'THIS IS A REMINDER!!!!'
+    "message": {
+      "text": 'THIS IS A REMINDER!!!!'
+    };
   }
 
   // Send the HTTP request to the Messenger Platform
