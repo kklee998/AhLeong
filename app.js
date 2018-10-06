@@ -121,6 +121,24 @@ function handleMessage(sender_psid, received_message) {
   let response;
 
   if(received_message.text){
+    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/\sbalance\s|\sbal\s/gi) != null){
+      if(received_message.quick_reply){
+            response = {
+              "text": 'Your balance is 0! So poor!',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Login",
+                  "payload":"LOGIN",
+                }
+              ]
+            };
+          } else {
+            response = {"text": "Your balance is 0! So poor!"};
+        }
+            break;
+    };
+
     switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
         case "login":
             response = login(sender_psid);
@@ -136,7 +154,7 @@ function handleMessage(sender_psid, received_message) {
                 },
                 {
                   "content_type":"text",
-                  "title":"QuickBalance",
+                  "title":"Quick Balance",
                   "payload":"BAL",
                 }
               ]
