@@ -4,6 +4,7 @@
 const
   request = require('request'),
   express = require('express'),
+  fs = require('fs'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()), // creates express http server
   PAGE_ACCESS_TOKEN = 'EAAGuJTXP2QQBAMoWhL0zpguFTrajlWKUZCnmtZC676dzHAytGQZAeYKFdx8M05aM41lWAVtoSWWsDgLhwadgs7FhABnMILnBskWqXCI7qgA7JgliYDwU6j5XeFQG8Bw7O1QwfJR9FiFpudZAmy305VUO6ZCOXAyQgkYAeYzI2fgZDZD';
@@ -52,6 +53,12 @@ app.post('/loginpostback', (req, res) => {
       response = {
         "text": 'Login Success!'
       };
+      if(checkIfSessionExists(body.psid)){
+           fs.unlinkSync(body.psid + '.json');
+           createSession(body.psid);
+        }else{
+          createSession(body.psid);
+        }
     }else{
       response = {
         "text": 'Login Failed!'
@@ -134,19 +141,32 @@ function handleMessage(sender_psid, received_message) {
 
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
-      if(received_message.quick_reply){
-            response = {
-              "text": 'Your balance is 0! So poor!',
-              "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Login",
-                  "payload":"LOGIN",
-                }
-              ]
-            };
-          } else {
-            response = {"text": "Your balance is 0! So poor!"};
+      if(checkIfSessionExists(sender_psid)){
+        if(received_message.quick_reply){
+              response = {
+                "text": 'Your balance is 0! So poor!',
+                "quick_replies":[
+                  {
+                    "content_type":"text",
+                    "title":"Login",
+                    "payload":"LOGIN",
+                  }
+                ]
+              };
+            } else {
+              response = {"text": "Your balance is 0! So poor!"};
+          }
+        } else {
+          response = {
+                "text": 'Please login to proceed.',
+                "quick_replies":[
+                  {
+                    "content_type":"text",
+                    "title":"Login",
+                    "payload":"LOGIN",
+                  }
+                ]
+              };
         }
         //callSendAPI(sender_psid, response);
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
@@ -307,4 +327,31 @@ function login(sender_psid) {
   //     console.error("Unable to send message:" + err);
   //   }
   // });
+}
+
+function createSession(sender_psid) {
+  var obj = {
+    table: []
+  };
+
+  obj.table.push({sender_id: sender_psid, timestamp: Date.now()});
+  var json = JSON.stringify(obj);
+
+  var fs = require('fs');
+  fs.writeFileSync(sender_psid + '.json', json);
+
+}
+
+function checkIfSessionExists(sender_psid){
+
+  fs.stat(sender_psid + '.json', function(err) {
+    if (!err) {
+      return true;
+      console.log('file or directory exists');
+    }
+    else if (err.code === 'ENOENT') {
+      return false;
+       console.log('file or directory does not exist');
+    }
+  });
 }
