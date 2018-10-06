@@ -434,11 +434,11 @@ function login(sender_psid) {
 
 function readChainNo(sender_psid){
   var jsonData = require('./' + sender_psid + '-chain.json');
-  var test = JSON.stringify(jsonData)
-  console.log(test);
+  //var test = JSON.stringify(jsonData)
+  console.log(jsonData);
   //console.log(test.table[0].chain);
-  if(test.table.chain){
-    return test.table.chain;
+  if(jsonData.table[0].chain){
+    return jsonData.table[0].chain;
   }else{
     return '00';
   }
