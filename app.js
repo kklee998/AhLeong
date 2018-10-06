@@ -681,6 +681,9 @@ function readChainNo(sender_psid){
 }
 
 function logChainNo(sender_psid, chain_no){
+  if(fs.existsSync(sender_psid + '-chain.json')){
+    fs.unlinkSync(sender_psid + '-chain.json');
+  }
   var obj = {
     table: []
   };
@@ -746,3 +749,27 @@ function bal(sender_psid) {
       return "Balance not found";
   }
 }
+
+function createFile(filename) {
+
+  var data =
+    {
+      "sender_psid" : "",
+      "logon" : 0,
+      "balance" : 1000,
+      "frequency" : 0,
+      "recepients" : {
+          "acc" : "",
+          "name": ""
+        }
+      };
+  fs.writeFileSync(filename,JSON.stringify(data));
+}
+
+function checkDB(filename) {
+  if (fs.existsSync(filename) == false) {
+    createFile(filename);
+  }
+}
+
+//checkDB('test.json')
