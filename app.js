@@ -50,20 +50,63 @@ app.post('/loginpostback', (req, res) => {
     // console.log(body.psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
-      response = {
-        "text": 'Login Success!'
-      };
-      console.log(checkIfSessionExists(body.psid));
+      switch(readChainNo(body.psid)){
+        case '00':
+          response = {
+              "text": 'Hi Admin, how can I help you?',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Quick Balance",
+                  "payload":"BAL",
+                }
+              ]
+            };
+          break;
+        case '10':
+          response = {
+            "text": 'Hi Admin!'
+          };
+          handleMessage(body.psid, 'bal');
+          break;
+        default:
+          response = {
+                "text": 'Hi Admin, how can I help you?',
+                "quick_replies":[
+                  {
+                    "content_type":"text",
+                    "title":"Quick Balance",
+                    "payload":"BAL",
+                  }
+                ]
+              };
+    }
+      //console.log(checkIfSessionExists(body.psid));
       if(checkIfSessionExists(body.psid)){
            fs.unlinkSync(body.psid + '.json');
            createSession(body.psid);
+           logChainNo(body.psid, '00');
         }else{
           createSession(body.psid);
+          logChainNo(body.psid, '00');
         }
     }else{
       response = {
-        "text": 'Login Failed!'
-      };
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "Login Failed. Please try again.",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
     }
 
     res.status(200).send('Please close this window to return to the conversation thread.');
@@ -158,6 +201,7 @@ function handleMessage(sender_psid, received_message) {
               response = {"text": "Your balance is 0! So poor!"};
           }
         } else {
+          logChainNo(sender_psid, '10');
           response = {
             attachment: {
                 type: "template",
@@ -188,6 +232,28 @@ function handleMessage(sender_psid, received_message) {
                 }
               ]
             };
+      }else{
+        response = login(sender_psid);
+        logChainNo(sender_psid, '00');
+      }
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer/gi) != null){
+      if(checkIfSessionExists(sender_psid)){
+        response = {
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "Please log in to proceed.",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
       }else{
         response = login(sender_psid);
       }
@@ -371,6 +437,29 @@ function login(sender_psid) {
   //     console.error("Unable to send message:" + err);
   //   }
   // });
+}
+
+function readChainNo(sender_psid){
+  let rawdata = fs.readFileSync(sender_psid + '-chain.json');  
+  let parsedData = JSON.parse(rawdata);  
+  if(parsedData.chain != null){
+    return parsedData.chain;
+  }else{
+    return '00';
+  }
+}
+
+function logChainNo(sender_psid, chain_no){
+  var obj = {
+    table: []
+  };
+
+  obj.table.push({sender_id: sender_psid, timestamp: Date.now(), chain: chain_no});
+  var json = JSON.stringify(obj);
+
+  var fs = require('fs');
+  fs.writeFileSync(sender_psid + '-chain.json', json);
+
 }
 
 function createSession(sender_psid) {
