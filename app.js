@@ -178,7 +178,7 @@ function login(sender_psid) {
                 url: "https://ahleong-kelvin.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
-                messenger_extensions: false
+                messenger_extensions: true
             }]
         }
     }
