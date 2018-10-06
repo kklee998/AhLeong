@@ -53,6 +53,7 @@ app.post('/loginpostback', (req, res) => {
       response = {
         "text": 'Login Success!'
       };
+      console.log(checkIfSessionExists(body.psid));
       if(checkIfSessionExists(body.psid)){
            fs.unlinkSync(body.psid + '.json');
            createSession(body.psid);
@@ -352,6 +353,9 @@ function checkIfSessionExists(sender_psid){
     else if (err.code === 'ENOENT') {
       return false;
        console.log('file or directory does not exist');
+    }
+    else{
+      console.log('err' + err.code);
     }
   });
 }
