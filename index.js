@@ -120,6 +120,8 @@ function handleMessage(sender_psid, received_message) {
         case "login":
             response = login(sender_psid);
             break;
+        case "file":
+            response = read_json();
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
@@ -186,4 +188,12 @@ function write_json(msg) {
 
   let data = JSON.stringfy(msg);
   fs.writeFileSync('data.json',data);
+}
+
+function read_json() {
+  fs.readFile('data.json', (err, data) => {
+    if (err) throw err;
+    let msg = JSON.parse(data);
+    console.log(msg);
+  });
 }
