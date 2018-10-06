@@ -91,6 +91,29 @@ app.post('/loginpostback', (req, res) => {
             "text": 'Hi Ali! Who do you want to transfer to?'
           }
           break;
+        case '30':
+          response = {
+            "text": 'Hi Ali! Which account to view?',
+              "quick_replies":[
+                {
+                    "content_type":"text",
+                    "title":"Savings",
+                    "payload":"SAVINGS",
+                },
+                {
+                    "content_type":"text",
+                    "title":"Current",
+                    "payload":"CURRENT",
+                }
+              ]
+          };
+          break;
+        case '31':
+          response = {
+            "text": 'Savings account:',
+            bal(sender_psid);
+          };
+          break;
         default:
           response = {
                 "text": 'Hi Ali, how can I help you ? ',
@@ -236,7 +259,38 @@ function handleMessage(sender_psid, received_message) {
           };
         }
         //callSendAPI(sender_psid, response);
-    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/account|acc/gi) != null){
+      if(checkIfSessionExists(sender_psid)){
+      response = {
+          "text": 'Which account to view?',
+            "quick_replies":[
+              {
+                  "content_type":"text",
+                  "title":"Savings",
+                  "payload":"SAVINGS",
+              },
+              {
+                  "content_type":"text",
+                  "title":"Current",
+                  "payload":"CURRENT",
+              }
+            ]
+          };
+      }else{
+      response = login(sender_psid);
+      logChainNo(sender_psid, '30');
+      }
+  } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/savings|saving/gi) != null){
+      if(checkIfSessionExists(sender_psid)){
+      response = {
+          "text": 'Savings account:',
+          bal(sender_psid);
+          };
+      }else{
+      response = login(sender_psid);
+      logChainNo(sender_psid, '31');
+      }
+  } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         response = {
           "text": 'It seems like you have already logged into an account, do you want to log out?',
@@ -678,4 +732,17 @@ function logout(sender_psid){
 
 function checkIfAccNoExists(){
   return true;
+}
+
+function bal(sender_psid) {
+  var jsonData = require('./' + sender_psid + '_db.json');
+  //var test = JSON.stringify(jsonData)
+  console.log(jsonData);
+  //add frequency of action
+  jsonData[3][0] += 1;
+  if(jsonData.table[2][0]){
+      return "Your account balance is " + jsonData.table[2][0];
+  }else{
+      return "Balance not found";
+  }
 }
