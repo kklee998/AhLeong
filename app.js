@@ -10,6 +10,10 @@ const
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
 // Serve the options path and set required headers
 app.get('/login', (req, res, next) => {
@@ -26,7 +30,7 @@ app.get('/login', (req, res, next) => {
 
 // Handle postback from webview
 app.post('/loginpostback', (req, res) => {
-    let body = req.params;
+    let body = req.body;
     console.log(body);
     console.log(body.username);
     console.log(body.password);
