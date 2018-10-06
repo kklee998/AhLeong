@@ -508,7 +508,7 @@ function handleMessage(sender_psid, received_message) {
       if(checkIfAccNoExists()){
         logChainNo(sender_psid, '23');
         response = {
-              "text": 'Recipient Name: ' + recipent_name + ', ' + 'Account Number: 1293800023983' ,
+              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
               "quick_replies":[
                 {
                   "content_type":"text",
