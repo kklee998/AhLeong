@@ -142,7 +142,7 @@ function handleMessage(sender_psid, received_message) {
               ]
             };
             break;
-        case "bal":
+        //case "bal":
         case "quickbalance":
           if(received_message.quick_replies){
             response = {
