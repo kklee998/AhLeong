@@ -134,6 +134,10 @@ function handleMessage(sender_psid, received_message) {
         case "quick balance":
           response = "Your balance is 0! So poor!";
           break;
+        case "remind":
+          setTimeout(reminder,3000,sender_psid);
+          //response = "Reminder set!";
+          break;
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
@@ -148,10 +152,7 @@ function handleMessage(sender_psid, received_message) {
       case "quick balance":
         response = "Your balance is 0! So poor!";
         break;
-      case "remind":
-        setTimeout(reminder,3000,sender_psid);
-        //response = "Reminder set!";
-        break;
+
       default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
