@@ -33,14 +33,20 @@
           zoom: 15
         });
 
-        infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
-        service.nearbySearch({
-          location: pyrmont,
-          radius: 500,
-          type: ['atm']
-        }, callback);
-      }
+        // infowindow = new google.maps.InfoWindow();
+        // var service = new google.maps.places.PlacesService(map);
+        // service.nearbySearch({
+        //   location: pyrmont,
+        //   radius: 500,
+        //   type: ['store']
+        // }, callback);
+        var request = {
+          query: 'ATM near me',
+          fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry'],
+        };
+          service = new google.maps.places.PlacesService(map);
+          service.findPlaceFromQuery(request, callback);
+        }
 
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
