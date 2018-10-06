@@ -11,6 +11,37 @@ const
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+// Serve the options path and set required headers
+app.get('/login', (req, res, next) => {
+    let referer = req.get('Referer');
+    if (referer) {
+        if (referer.indexOf('www.messenger.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.messenger.com/');
+        } else if (referer.indexOf('www.facebook.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
+        }
+        res.sendFile('login.html', {root: __dirname});
+    }
+});
+
+// Handle postback from webview
+app.get('/loginpostback', (req, res) => {
+    let body = req.query;
+    let response;
+    if(${body.username} === 'admin' && ${body.password} === 'admin123'){
+      response = {
+        "text": 'Login Success!'
+      };
+    }else{
+      response = {
+        "text": 'Login Failed!'
+      };
+    }
+
+    res.status(200).send('Please close this window to return to the conversation thread.');
+    callSendAPI(body.psid, response);
+});
+
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
  
@@ -29,6 +60,8 @@ app.post('/webhook', (req, res) => {
     // Get the sender PSID
     let sender_psid = webhook_event.sender.id;
     console.log('Sender PSID: ' + sender_psid);
+
+    let lastMsgTimestamp = webhook_event.timestamp;
 
     if (webhook_event.message) {
       handleMessage(sender_psid, webhook_event.message);
@@ -75,15 +108,24 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-
-
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
 
   if(received_message.text){
-    response={
-      "text": 'Dude I am just a bot!'
+    switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
+        case "room preferences":
+            response = login(sender_psid);
+            break;
+        default:
+            response = {
+                "text": `You sent the message: "${received_message.text}".`
+            };
+            break;
+    }
+  } else {
+    response = {
+        "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
     }
   }
   callSendAPI(sender_psid, response);
@@ -100,6 +142,40 @@ function callSendAPI(sender_psid, response) {
     },
     "message": response
   }
+
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+function login(sender_psid) {
+  let request_body = {
+    attachment: {
+        type: "template",
+        payload: {
+            template_type: "button",
+            text: "OK, let's log in to your Hong Leong Bank account first.",
+            buttons: [{
+                type: "web_url",
+                url: SERVER_URL + "/login",
+                title: "Login",
+                webview_height_ratio: "compact",
+                messenger_extensions: false
+            }]
+        }
+    }
+  };
+
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
