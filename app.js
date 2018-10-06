@@ -619,6 +619,7 @@ function readChainNo(sender_psid){
       return '00';
     }
   }else{
+    logChainNo(sender_psid, '00');
     return '00';
   }
 }
