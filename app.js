@@ -750,11 +750,17 @@ function bal(sender_psid) {
   //var test = JSON.stringify(jsonData)
   console.log(jsonData);
   //add frequency of action
-  jsonData[3][0] += 1;
+  frequency = jsonData[3][0];
+  frequency += 1; 
   if(jsonData.table[2][0]){
-      return "Your account balance is " + jsonData.table[2][0];
+      if(frequency > 2){
+        return {'text':"Your account balance is " + jsonData.table[2][0],
+      'text':"Hi, you seem to check your balance a lot. You can type 'b' to check it quickly next time."};
+      } else{
+        return {'text':"Your account balance is " + jsonData.table[2][0]};
+      }
   }else{
-      return "Balance not found";
+      return {'text':"Balance not found"};
   }
 }
 
