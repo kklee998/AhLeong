@@ -25,7 +25,7 @@ app.get('/login', (req, res, next) => {
 });
 
 // Handle postback from webview
-app.post('/loginpostback', (req, res) => {
+app.get('/loginpostback', (req, res) => {
     let body = req.query;
     console.log(body);
     console.log(body.username);
