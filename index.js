@@ -11,6 +11,10 @@ const
   app.use(express.static('public'));
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 // Serve the options path and set required headers
 app.get('/login', (req, res, next) => {
@@ -27,7 +31,11 @@ app.get('/login', (req, res, next) => {
 
 // Handle postback from webview
 app.post('/loginpostback', (req, res) => {
-    let body = req.query;
+    let body = req.body;
+    // console.log(body);
+    // console.log(body.username);
+    // console.log(body.password);
+    // console.log(body.psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
@@ -38,8 +46,7 @@ app.post('/loginpostback', (req, res) => {
         "text": 'Login Failed!'
       };
     }
-
-    res.status(200).send('Please close this window to return to the conversation thread.');
+     res.status(200).send('Please close this window to return to the conversation thread.');
     callSendAPI(body.psid, response);
 });
 
@@ -47,41 +54,30 @@ app.post('/loginpostback', (req, res) => {
 app.post('/webhook', (req, res) => {
 
   let body = req.body;
-
-  // Checks this is an event from a page subscription
+   // Checks this is an event from a page subscription
   if (body.object === 'page') {
-
-    // Iterates over each entry - there may be multiple if batched
+     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function (entry) {
-
-    // Gets the body of the webhook event
+     // Gets the body of the webhook event
     let webhook_event = entry.messaging[0];
-    //console.log(webhook_event);
-
-    // Get the sender PSID
+    console.log(webhook_event);
+     // Get the sender PSID
     let sender_psid = webhook_event.sender.id;
-    //console.log('Sender PSID: ' + sender_psid);
-
-    let lastMsgTimestamp = webhook_event.timestamp;
-
-    if (webhook_event.message) {
+    console.log('Sender PSID: ' + sender_psid);
+     let lastMsgTimestamp = webhook_event.timestamp;
+     if (webhook_event.message) {
       handleMessage(sender_psid, webhook_event.message);
-      write_json(webhook_event.message);
-
     } else if (webhook_event.postback) {
       handlePostback(sender_psid, webhook_event.postback);
     }
-
-  });
-
-    // Returns a '200 OK' response to all requests
+   });
+     // Returns a '200 OK' response to all requests
     res.status(200).send('EVENT_RECEIVED');
   } else {
     // Returns a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
   }
-
-});
+ });
 
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
@@ -110,30 +106,59 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
-
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
-
-  if(received_message.text){
+   if(received_message.text){
     switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
         case "login":
             response = login(sender_psid);
             break;
-        case "file":
-            response = read_json();
+        case "hi":
+            response = {
+              "text": 'How can I help you?',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Login",
+                  "payload":"LOGIN",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Quick Balance",
+                  "payload":"BAL",
+                }
+              ]
+            };
             break;
-        case "remind":
-            setTimeout(reminder,3000,sender_psid);
-            //response = "Reminder set!";
-            break;
+        case "quick balance":
+          response = "Your balance is 0! So poor!";
+          break;
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
             };
             break;
     }
-  } else {
+  } else if(received_message.quick_replies) {
+    switch (received_message.quick_replies.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
+      case "login":
+        response = login(sender_psid);
+        break;
+      case "quick balance":
+        response = "Your balance is 0! So poor!";
+        break;
+      case "remind":
+        setTimeout(reminder,3000,sender_psid);
+        //response = "Reminder set!";
+        break;
+      default:
+            response = {
+                "text": `You sent the message: "${received_message.text}".`
+            };
+            break;
+    }
+  }else {
     response = {
         "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
     }
@@ -177,17 +202,16 @@ function login(sender_psid) {
             text: "OK, let's log in to your Hong Leong Bank account first.",
             buttons: [{
                 type: "web_url",
-                url: "ahleong.herokuapp.com/login",
+                url: "https://ahleong-kelvin.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
-                messenger_extensions: false
+                messenger_extensions: true
             }]
         }
     }
   };
-
-  return request_body;
-}
+   return request_body;
+ }
 
 function write_json(msg) {
 
