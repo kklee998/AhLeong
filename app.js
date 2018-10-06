@@ -27,6 +27,10 @@ app.get('/login', (req, res, next) => {
 // Handle postback from webview
 app.post('/loginpostback', (req, res) => {
     let body = req.query;
+    console.log(body);
+    console.log(body.username);
+    console.log(body.password);
+    console.log(body.psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
