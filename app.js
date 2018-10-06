@@ -136,15 +136,15 @@ function handleMessage(sender_psid, received_message) {
                 },
                 {
                   "content_type":"text",
-                  "title":"Quick Balance",
+                  "title":"QuickBalance",
                   "payload":"BAL",
                 }
               ]
             };
             break;
         case "bal":
-        case "quick balance":
-          if(received_message.quick_replies.payload){
+        case "quickbalance":
+          if(received_message.quick_replies){
             response = {
               "text": "Your balance is 0! So poor!",
               "quick_replies":[
