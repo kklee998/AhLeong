@@ -125,7 +125,7 @@ function handleMessage(sender_psid, received_message) {
             break;
         case "remind":
             setTimeout(reminder,3000,sender_psid);
-            response = "Reminder set!";
+            //response = "Reminder set!";
             break;
         default:
             response = {
