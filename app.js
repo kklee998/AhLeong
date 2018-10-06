@@ -608,20 +608,16 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
-  if(fs.existsSync(sender_psid + '-chain.json')){
-    var jsonData = require('./' + sender_psid + '-chain.json');
+  var jsonData = require('./' + sender_psid + '-chain.json');
     //var test = JSON.stringify(jsonData)
-    console.log(jsonData);
+  console.log(jsonData);
     //console.log(test.table[0].chain);
-    if(jsonData.table[0].chain){
-      return jsonData.table[0].chain;
-    }else{
-      return '00';
-    }
+  if(jsonData.table[0].chain){
+    return jsonData.table[0].chain;
   }else{
-    logChainNo(sender_psid, '00');
     return '00';
   }
+  
 }
 
 function logChainNo(sender_psid, chain_no){
