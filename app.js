@@ -433,8 +433,9 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
-  var jsonData = require('./' + sender_psid + '-chain.json');
+  var jsonData = require(sender_psid + '-chain.json');
   var test = JSON.stringify(jsonData)
+  console.log(test);
   console.log(test.chain);
   if(test.chain){
     return test.chain;
