@@ -142,6 +142,9 @@ function handleMessage(sender_psid, received_message) {
               ]
             };
             break;
+        case "quick balance":
+          response = "Your balance is 0! So poor!";
+          break;
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
