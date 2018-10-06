@@ -122,8 +122,10 @@ function handleMessage(sender_psid, received_message) {
             break;
         case "file":
             response = read_json();
+            break;
         case "remind":
-            setTimeout(reminder,30,sender_psid)
+            setTimeout(reminder,30,sender_psid);
+            break;
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
