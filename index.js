@@ -195,5 +195,8 @@ function read_json() {
     if (err) throw err;
     let msg = JSON.parse(data);
     console.log(msg);
+
+    let msg2 = Object.msg2(msg);
+    console.log(msg2[1]);
   });
 }
