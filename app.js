@@ -688,7 +688,7 @@ function logChainNo(sender_psid, chain_no){
   obj.table.push({sender_id: sender_psid, timestamp: Date.now(), chain: chain_no});
   var json = JSON.stringify(obj);
 
-  var fs = require('fs');
+  //fs = require('fs');
   fs.writeFileSync(sender_psid + '-chain.json', json);
 
 }
