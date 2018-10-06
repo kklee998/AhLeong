@@ -124,7 +124,8 @@ function handleMessage(sender_psid, received_message) {
             response = read_json();
             break;
         case "remind":
-            setTimeout(reminder,30,sender_psid);
+            setTimeout(reminder(sender_psid),1000,sender_psid);
+            response = "Reminder set!";
             break;
         default:
             response = {
