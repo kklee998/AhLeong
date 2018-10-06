@@ -409,7 +409,7 @@ function login(sender_psid) {
                 type: "web_url",
                 url: "https://ahleong-kelvin.herokuapp.com/login",
                 title: "Login",
-                webview_height_ratio: "compact",
+                webview_height_ratio: "tall",
                 messenger_extensions: true
             }]
         }
@@ -435,7 +435,7 @@ function login(sender_psid) {
 function readChainNo(sender_psid){
   let rawdata = fs.readFileSync(sender_psid + '-chain.json');  
   let parsedData = JSON.parse(rawdata);  
-  console.log(parsedData.chain);
+  console.log(parsedData);
   if(parsedData.chain){
     return parsedData.chain;
   }else{
