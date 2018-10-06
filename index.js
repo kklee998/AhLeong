@@ -94,7 +94,7 @@ function handlePostback(sender_psid, received_postback) {}
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
-  let message = {
+  let request_body = {
     "recipient": {
       "id": sender_psid
     },
