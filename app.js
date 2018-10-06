@@ -136,15 +136,11 @@ function handleMessage(sender_psid, received_message) {
           } else {
             response = {"text": "Your balance is 0! So poor!"};
         }
-        callSendAPI(sender_psid, response);
-    };
-
-    switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
-        case "login":
-            response = login(sender_psid);
-            break;
-        case "hi":
-            response = {
+        //callSendAPI(sender_psid, response);
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
+      response = login(sender_psid);
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/hi|hai|hello|hey/gi) != null){
+      response = {
               "text": 'How can I help you?',
               "quick_replies":[
                 {
@@ -159,35 +155,61 @@ function handleMessage(sender_psid, received_message) {
                 }
               ]
             };
-            break;
-        //case "bal":
-        case "quickbalance":
-          if(received_message.quick_reply){
-            response = {
-              "text": 'Your balance is 0! So poor!',
-              "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Login",
-                  "payload":"LOGIN",
-                }
-              ]
-            };
-          } else {
-            response = {"text": "Your balance is 0! So poor!"};
-        }
-            break;
-        default:
-            response = {
-                "text": `You sent the message: "${received_message.text}".`
-            };
-            break;
-    }
-  }else {
-    response = {
+    } else {
+      response = {
         "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
-    }
+      }
+    };
   }
+  //   switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
+  //       case "login":
+  //           response = login(sender_psid);
+  //           break;
+  //       case "hi":
+  //           response = {
+  //             "text": 'How can I help you?',
+  //             "quick_replies":[
+  //               {
+  //                 "content_type":"text",
+  //                 "title":"Login",
+  //                 "payload":"LOGIN",
+  //               },
+  //               {
+  //                 "content_type":"text",
+  //                 "title":"Quick Balance",
+  //                 "payload":"BAL",
+  //               }
+  //             ]
+  //           };
+  //           break;
+  //       //case "bal":
+  //       case "quickbalance":
+  //         if(received_message.quick_reply){
+  //           response = {
+  //             "text": 'Your balance is 0! So poor!',
+  //             "quick_replies":[
+  //               {
+  //                 "content_type":"text",
+  //                 "title":"Login",
+  //                 "payload":"LOGIN",
+  //               }
+  //             ]
+  //           };
+  //         } else {
+  //           response = {"text": "Your balance is 0! So poor!"};
+  //       }
+  //           break;
+  //       default:
+  //           response = {
+  //               "text": `You sent the message: "${received_message.text}".`
+  //           };
+  //           break;
+  //   }
+  // }else {
+  //   response = {
+  //       "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
+  //   }
+  // }
   callSendAPI(sender_psid, response);
 }
 
