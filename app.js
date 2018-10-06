@@ -144,7 +144,7 @@ function handleMessage(sender_psid, received_message) {
             break;
         //case "bal":
         case "quickbalance":
-          if(received_message.quick_replies){
+          if(received_message.quick_reply){
             response = {
               "text": 'Your balance is 0! So poor!',
               "quick_replies":[
