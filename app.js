@@ -121,7 +121,7 @@ function handleMessage(sender_psid, received_message) {
   let response;
 
   if(received_message.text){
-    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/\sbalance\s|\sbal\s/gi) != null){
+    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/\sbalance\s|\sbal\s/gi) !== null){
       if(received_message.quick_reply){
             response = {
               "text": 'Your balance is 0! So poor!',
