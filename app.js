@@ -227,13 +227,14 @@ app.get('/webhook', (req, res) => {
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
+  let response1;
 
   if(readChainNo(sender_psid) == '22'){
     if(checkIfSessionExists(sender_psid)){
       let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
       if(checkIfAccNoExists()){
         logChainNo(sender_psid, '23');
-        response = {
+        response1 = {
               "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
               "quick_replies":[
                 {
@@ -251,7 +252,7 @@ function handleMessage(sender_psid, received_message) {
       }
     }else{
       logChainNo(sender_psid, '21');
-        response = {
+        response1 = {
             attachment: {
                 type: "template",
                 payload: {
@@ -272,12 +273,12 @@ function handleMessage(sender_psid, received_message) {
 
   if(readChainNo(sender_psid) == '24'){
     if(string.match(/^[0-9]+$/) != null){
-      response = {
+      response1 = {
               "text": 'Enter a description for this transaction.'
       };
       logChainNo(sender_psid, '25');
     }else{
-      response = {
+      response1 = {
               "text": 'Please enter numbers only.'
       };
       logChainNo(sender_psid, '24');
@@ -285,7 +286,7 @@ function handleMessage(sender_psid, received_message) {
   }
 
   if(readChainNo(sender_psid) == '25'){
-    response = {
+    response1 = {
       "text": 'Do yo want to set a reminder for this transaction?' ,
         "quick_replies":[
           {
@@ -307,7 +308,7 @@ function handleMessage(sender_psid, received_message) {
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
-              response = {
+              respons = {
                 "text": 'Your balance is 0! So poor!',
               };
             } else {
@@ -578,8 +579,11 @@ function handleMessage(sender_psid, received_message) {
   // }
 
   
-
-  callSendAPI(sender_psid, response);
+  if(response1 != null){
+    callSendAPI(sender_psid, response1);
+  }else{
+    callSendAPI(sender_psid, response);
+  }
 }
 
 // Handles messaging_postbacks events
