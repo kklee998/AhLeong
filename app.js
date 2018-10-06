@@ -608,12 +608,16 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
-  var jsonData = require('./' + sender_psid + '-chain.json');
-  //var test = JSON.stringify(jsonData)
-  console.log(jsonData);
-  //console.log(test.table[0].chain);
-  if(jsonData.table[0].chain){
-    return jsonData.table[0].chain;
+  if(fs.existsSync(sender_psid + '-chain.json')){
+    var jsonData = require('./' + sender_psid + '.json');
+    //var test = JSON.stringify(jsonData)
+    console.log(jsonData);
+    //console.log(test.table[0].chain);
+    if(jsonData.table[0].chain){
+      return jsonData.table[0].chain;
+    }else{
+      return '00';
+    }
   }else{
     return '00';
   }
