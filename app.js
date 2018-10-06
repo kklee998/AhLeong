@@ -309,6 +309,7 @@ function handleMessage(sender_psid, received_message) {
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer|pay/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         response = {"text": 'Enter recipient name.'};
+        callSendAPI(sender_psid, response);
         logChainNo(sender_psid, '22');
       }else{
         logChainNo(sender_psid, '21');
