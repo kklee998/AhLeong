@@ -114,7 +114,7 @@ function handleMessage(sender_psid, received_message) {
 
   if(received_message.text){
     switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
-        case "room preferences":
+        case "login":
             response = login(sender_psid);
             break;
         default:
@@ -167,7 +167,7 @@ function login(sender_psid) {
             text: "OK, let's log in to your Hong Leong Bank account first.",
             buttons: [{
                 type: "web_url",
-                url: SERVER_URL + "/login",
+                url: "ahleong.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
                 messenger_extensions: false
