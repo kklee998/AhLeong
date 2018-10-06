@@ -34,7 +34,7 @@ app.post('/loginpostback', (req, res) => {
     console.log(body);
     console.log(body.username);
     console.log(body.password);
-    console.log(body.sender_psid);
+    console.log(body.psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
@@ -47,7 +47,7 @@ app.post('/loginpostback', (req, res) => {
     }
 
     res.status(200).send('Please close this window to return to the conversation thread.');
-    callSendAPI(body.sender_psid, response);
+    callSendAPI(body.psid, response);
 });
 
 // Creates the endpoint for our webhook 
