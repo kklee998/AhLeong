@@ -609,6 +609,7 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
+  console.log(fs.existsSync(sender_psid + '-chain.json'));
   if(fs.existsSync(sender_psid + '-chain.json')){
     var jsonData = require('./' + sender_psid + '-chain.json');
       //var test = JSON.stringify(jsonData)
