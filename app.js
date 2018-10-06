@@ -666,7 +666,7 @@ function checkIfSessionExists(sender_psid){
   //     return false;
   //   }
   // });
-  return fs.existsSync(sender_psid + '.json');
+  return fs.existsSync('./' + sender_psid + '.json');
 
 }
 
