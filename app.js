@@ -437,8 +437,8 @@ function readChainNo(sender_psid){
   var test = JSON.stringify(jsonData)
   console.log(test);
   //console.log(test.table[0].chain);
-  if(test.table[0].chain){
-    return test.table[0].chain;
+  if(test.table.chain){
+    return test.table.chain;
   }else{
     return '00';
   }
