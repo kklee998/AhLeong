@@ -111,7 +111,7 @@ app.post('/loginpostback', (req, res) => {
         case '31':
           response = {
             "text": 'Savings account:',
-            bal(sender_psid);
+            // bal(sender_psid);
           };
           break;
         default:
@@ -284,7 +284,7 @@ function handleMessage(sender_psid, received_message) {
       if(checkIfSessionExists(sender_psid)){
       response = {
           "text": 'Savings account:',
-          bal(sender_psid);
+          //bal(sender_psid);
           };
       }else{
       response = login(sender_psid);
@@ -668,7 +668,7 @@ function readChainNo(sender_psid){
     var jsonData = require('./' + sender_psid + '-chain.json');
       //var test = JSON.stringify(jsonData)
     console.log(jsonData);
-      //console.log(test.table[0].chain);
+    console.log(jsonData.table[0].chain);
     if(jsonData.table[0].chain){
       return jsonData.table[0].chain;
     }else{
