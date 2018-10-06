@@ -19,11 +19,11 @@
         // TODO: How to parse env file from here?
         MessengerExtensions.getSupportedFeatures(function success(result) {
             let features = result.supported_features;
-            //if (features.includes("context")) {
+            if (features.includes("context")) {
                 MessengerExtensions.getContext("472949816547588",
                     function success(thread_context) {
                         // success
-                        document.getElementById("psid").value = thread_context.psid;
+                        document.getElementById('sender_psid').value = thread_context.psid;
                         console.log(thread_context.psid);
                     },
                     function error(err) {
@@ -31,7 +31,7 @@
                         console.log(err);
                     }
                 );
-           // }
+            }
         }, function error(err) {
             // error retrieving supported features
             console.log(err);
@@ -46,7 +46,7 @@
     };
 </script>
 <form action="/loginpostback" method="get">
-    <input type="hidden" name="psid" id="psid">
+    <input type="hidden" name="psid" id="sender_psid">
     <h3>Username</h3>
     <input type="text" name="username" value="User ID" ><br>
     <h3>Password</h3>
