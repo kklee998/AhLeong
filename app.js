@@ -345,17 +345,20 @@ function createSession(sender_psid) {
 
 function checkIfSessionExists(sender_psid){
 
-  fs.stat(sender_psid + '.json', function(err) {
-    if (!err) {
-      return true;
-      console.log('file or directory exists');
-    }
-    else if (err.code === 'ENOENT') {
-      return false;
-       console.log('file or directory does not exist');
-    }
-    else{
-      console.log('err' + err.code);
-    }
-  });
+  // fs.stat('/' + sender_psid + '.json', function(err) {
+  //   if (!err) {
+  //     return true;
+  //     console.log('file or directory exists');
+  //   }
+  //   else if (err.code === 'ENOENT') {
+  //     return false;
+  //      console.log('file or directory does not exist');
+  //   }
+  //   else{
+  //     console.log('err' + err.code);
+  //     return false;
+  //   }
+  // });
+  return fs.existsSync(sender_psid + '.json');
+
 }
