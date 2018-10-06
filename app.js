@@ -433,11 +433,11 @@ function login(sender_psid) {
 }
 
 function readChainNo(sender_psid){
-  let rawdata = fs.readFileSync(sender_psid + '-chain.json');  
-  let parsedData = JSON.parse(rawdata);  
-  console.log(parsedData);
-  if(parsedData.chain){
-    return parsedData.chain;
+  var jsonData = require('./' + sender_psid + '-chain.json');
+  var test = JSON.stringify(jsonData)
+  console.log(test.chain);
+  if(test.chain){
+    return test.chain;
   }else{
     return '00';
   }
