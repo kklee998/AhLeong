@@ -189,13 +189,6 @@ function handleMessage(sender_psid, received_message) {
         if(received_message.quick_reply){
               response = {
                 "text": 'Your balance is 0! So poor!',
-                "quick_replies":[
-                  {
-                    "content_type":"text",
-                    "title":"Login",
-                    "payload":"LOGIN",
-                  }
-                ]
               };
             } else {
               response = {"text": "Your balance is 0! So poor!"};
@@ -236,7 +229,7 @@ function handleMessage(sender_psid, received_message) {
         response = login(sender_psid);
         logChainNo(sender_psid, '00');
       }
-    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer/gi) != null){
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer|pay/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         response = {
             attachment: {
@@ -442,6 +435,7 @@ function login(sender_psid) {
 function readChainNo(sender_psid){
   let rawdata = fs.readFileSync(sender_psid + '-chain.json');  
   let parsedData = JSON.parse(rawdata);  
+  console.log(parsedData.chain);
   if(parsedData.chain){
     return parsedData.chain;
   }else{
