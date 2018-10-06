@@ -167,7 +167,7 @@ function login(sender_psid) {
             text: "OK, let's log in to your Hong Leong Bank account first.",
             buttons: [{
                 type: "web_url",
-                url: "ahleong.herokuapp.com/login",
+                url: "ahleong-kelvin.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
                 messenger_extensions: false
@@ -175,7 +175,7 @@ function login(sender_psid) {
         }
     }
   };
-
+  console.log(request_body);
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
