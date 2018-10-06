@@ -144,21 +144,21 @@ function handleMessage(sender_psid, received_message) {
             break;
         //case "bal":
         case "quickbalance":
-          // if(received_message.quick_replies){
-          //   response = {
-          //     "text": "Your balance is 0! So poor!",
-          //     "quick_replies":[
-          //       {
-          //         "content_type":"text",
-          //         "title":"Login",
-          //         "payload":"LOGIN",
-          //       }
-          //     ]
-          //   };
-          // } else {
-          response = "Your balance is 0! So poor!";
-        //}
-          break;
+          if(received_message.quick_replies){
+            response = {
+              "text": 'Your balance is 0! So poor!',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Login",
+                  "payload":"LOGIN",
+                }
+              ]
+            };
+          } else {
+            response = {"text": "Your balance is 0! So poor!"};
+        }
+            break;
         default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
