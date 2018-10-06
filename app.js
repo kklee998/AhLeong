@@ -136,7 +136,6 @@ function handleMessage(sender_psid, received_message) {
           } else {
             response = {"text": "Your balance is 0! So poor!"};
         }
-            break;
     };
 
     switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
