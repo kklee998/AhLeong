@@ -124,7 +124,7 @@ function handleMessage(sender_psid, received_message) {
             response = read_json();
             break;
         case "remind":
-            setTimeout(reminder(sender_psid),1000,sender_psid);
+            setTimeout(reminder,3000,sender_psid);
             response = "Reminder set!";
             break;
         default:
@@ -208,7 +208,7 @@ function reminder(sender_psid) {
     "recipient": {
       "id": sender_psid
     },
-    "message": "THIS IS A REMINDER!!!!"
+    "message": 'THIS IS A REMINDER!!!!'
   }
 
   // Send the HTTP request to the Messenger Platform
