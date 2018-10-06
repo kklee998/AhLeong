@@ -45,13 +45,65 @@
         });
     };
 </script>
-<form action="/loginpostback" method="post">
-    <input type="hidden" name="psid" id="sender_psid">
-    <h3>Username</h3>
-    <input type="text" name="username" value="User ID" ><br>
-    <h3>Password</h3>
-    <input type="password" name="password" value="Password" ><br>
-    <input type="submit" value="Submit" id="submitButton">
-</form>
+<style id="login_background">
+    .skyblue {
+        background-color: #134077 !important;
+        height: 580px;
+        width: 324px;
+    }
+
+    .span {
+        background-size: 20px 25px;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        color: white;
+        margin-top: 8px;
+        margin-bottom: 20px;
+    } 			
+
+    .box {
+        border-radius: 3px;
+        border-color: transparent;
+        width: 250px;
+        height: 30px;
+    }
+
+    .button {
+        background-color: rgb(132, 195, 79); 
+        color: ghostwhite; 
+        font-weight: bold;
+        border-radius: 3px;
+        border-color: transparent;
+        width: 250px;
+        height: 30px;
+        margin-top: 10px;
+    }
+
+    .logo {
+        background: url(https://s.hongleongconnect.my/rib/img/connect-logo-white.png) no-repeat center;
+        height: 100px;
+        padding: 10px;
+    }
+</style>
+<div id="login_background" class="skyblue" align="center">
+    <div class="logo"></div>
+    <div style="margin-left:225px;position:relative;color:#fff;right:70px;bottom:25px;font-size:14px;font-family:Arial, Helvetica, sans-serif;">
+        <label>Online Banking</label>
+    </div>
+    <form action="/loginpostback" method="post">
+        <input type="hidden" name="psid" id="sender_psid"><br>
+        <div class="span">
+            <label>ONLINE BANKING SECURED LOGIN</label>
+        </div>
+        <input class="box" type="text" role="textbox" name="username" placeholder="Username" ><br>
+        <br>
+        <input class="box" type="password" name="password" placeholder="Password" ><br>
+        <br>
+        <input class="button" type="submit" value="Submit" id="submitButton">
+        <br>
+        <input class="button" style="background-color: grey; color :ghostwhite" type="submit" value="Register">
+    </form>
+</div>>
 </body>
 </html>
