@@ -228,6 +228,80 @@ app.get('/webhook', (req, res) => {
 function handleMessage(sender_psid, received_message) {
   let response;
 
+  if(readChainNo(sender_psid) == '22'){
+    if(checkIfSessionExists(sender_psid)){
+      let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
+      if(checkIfAccNoExists()){
+        logChainNo(sender_psid, '23');
+        response = {
+              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Yes",
+                  "payload":"YES",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Cancel",
+                  "payload":"CANCEL",
+                }
+              ]
+            };
+      }
+    }else{
+      logChainNo(sender_psid, '21');
+        response = {
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "button",
+                    text: "Please log in to proceed.",
+                    buttons: [{
+                        type: "web_url",
+                        url: "https://ahleong-kelvin.herokuapp.com/login",
+                        title: "Login",
+                        webview_height_ratio: "compact",
+                        messenger_extensions: true
+                    }]
+                }
+            }
+          };
+    }
+  }
+
+  if(readChainNo(sender_psid) == '24'){
+    if(string.match(/^[0-9]+$/) != null){
+      response = {
+              "text": 'Enter a description for this transaction.'
+      };
+      logChainNo(sender_psid, '25');
+    }else{
+      response = {
+              "text": 'Please enter numbers only.'
+      };
+      logChainNo(sender_psid, '24');
+    }
+  }
+
+  if(readChainNo(sender_psid) == '25'){
+    response = {
+      "text": 'Do yo want to set a reminder for this transaction?' ,
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Yes",
+            "payload":"YES",
+          },
+          {
+            "content_type":"text",
+            "title":"Cancel",
+            "payload":"NO",
+          }
+        ]
+      };
+  logChainNo(sender_psid, '26');
+  }
 
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
@@ -309,7 +383,7 @@ function handleMessage(sender_psid, received_message) {
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer|pay/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         response = {"text": 'Enter recipient name.'};
-        callSendAPI(sender_psid, response);
+        //callSendAPI(sender_psid, response);
         logChainNo(sender_psid, '22');
       }else{
         logChainNo(sender_psid, '21');
@@ -503,80 +577,7 @@ function handleMessage(sender_psid, received_message) {
   //   }
   // }
 
-  if(readChainNo(sender_psid) == '22'){
-    if(checkIfSessionExists(sender_psid)){
-      let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
-      if(checkIfAccNoExists()){
-        logChainNo(sender_psid, '23');
-        response = {
-              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
-              "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Yes",
-                  "payload":"YES",
-                },
-                {
-                  "content_type":"text",
-                  "title":"Cancel",
-                  "payload":"CANCEL",
-                }
-              ]
-            };
-      }
-    }else{
-      logChainNo(sender_psid, '21');
-        response = {
-            attachment: {
-                type: "template",
-                payload: {
-                    template_type: "button",
-                    text: "Please log in to proceed.",
-                    buttons: [{
-                        type: "web_url",
-                        url: "https://ahleong-kelvin.herokuapp.com/login",
-                        title: "Login",
-                        webview_height_ratio: "compact",
-                        messenger_extensions: true
-                    }]
-                }
-            }
-          };
-    }
-  }
-
-  if(readChainNo(sender_psid) == '24'){
-    if(string.match(/^[0-9]+$/) != null){
-      response = {
-              "text": 'Enter a description for this transaction.'
-      };
-      logChainNo(sender_psid, '25');
-    }else{
-      response = {
-              "text": 'Please enter numbers only.'
-      };
-      logChainNo(sender_psid, '24');
-    }
-  }
-
-  if(readChainNo(sender_psid) == '25'){
-    response = {
-      "text": 'Do yo want to set a reminder for this transaction?' ,
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"Yes",
-            "payload":"YES",
-          },
-          {
-            "content_type":"text",
-            "title":"Cancel",
-            "payload":"NO",
-          }
-        ]
-      };
-  logChainNo(sender_psid, '26');
-  }
+  
 
   callSendAPI(sender_psid, response);
 }
