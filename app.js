@@ -25,7 +25,7 @@ app.get('/login', (req, res, next) => {
 });
 
 // Handle postback from webview
-app.get('/loginpostback', (req, res) => {
+app.post('/loginpostback', (req, res) => {
     let body = req.query;
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
@@ -175,7 +175,7 @@ function login(sender_psid) {
         }
     }
   };
-  
+
   return request_body;
   // Send the HTTP request to the Messenger Platform
   // request({
