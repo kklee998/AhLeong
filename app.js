@@ -665,7 +665,7 @@ function login(sender_psid) {
 function readChainNo(sender_psid){
   console.log(fs.existsSync(sender_psid + '-chain.json'));
   if(fs.existsSync(sender_psid + '-chain.json')){
-    var jsonData = require('./' + sender_psid + '-chain.json');
+    let jsonData = require('./' + sender_psid + '-chain.json');
       //var test = JSON.stringify(jsonData)
     console.log(jsonData);
     console.log(jsonData.table[0].chain);
@@ -692,7 +692,7 @@ function logChainNo(sender_psid, chain_no){
   var json = JSON.stringify(obj);
 
   //fs = require('fs');
-  fs.writeFileSync(sender_psid + '-chain.json', json, {encoding:'utf8',flag:'w'});
+  fs.writeFileSync(sender_psid + '-chain.json', json);
 
 }
 
