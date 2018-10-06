@@ -645,7 +645,7 @@ function createSession(sender_psid) {
   obj.table.push({sender_id: sender_psid, timestamp: Date.now()});
   var json = JSON.stringify(obj);
 
-  var fs = require('fs');
+  //var fs = require('fs');
   fs.writeFileSync(sender_psid + '.json', json);
 
 }
@@ -666,7 +666,7 @@ function checkIfSessionExists(sender_psid){
   //     return false;
   //   }
   // });
-  return fs.existsSync('./' + sender_psid + '.json');
+  return fs.existsSync(sender_psid + '.json');
 
 }
 
