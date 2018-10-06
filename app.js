@@ -436,7 +436,7 @@ function readChainNo(sender_psid){
   var jsonData = require('./' + sender_psid + '-chain.json');
   var test = JSON.stringify(jsonData)
   console.log(test);
-  console.log(test.table[0].chain);
+  //console.log(test.table[0].chain);
   if(test.chain){
     return test.chain;
   }else{
