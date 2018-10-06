@@ -149,7 +149,7 @@ function handleMessage(sender_psid, received_message) {
             break;
     }
   } else if(received_message.quick_replies) {
-    switch (received_message.quick_replies.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
+    switch (received_message.quick_replies.payload.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
       case "login":
         response = login(sender_psid);
         break;
