@@ -148,7 +148,21 @@ function handleMessage(sender_psid, received_message) {
             };
             break;
     }
-  } else {
+  } else if(received_message.quick_replies) {
+    switch (received_message.quick_replies.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
+      case "login":
+        response = login(sender_psid);
+        break;
+      case "bal":
+        response = "Your balance is 0! So poor!";
+        break;
+      default:
+            response = {
+                "text": `You sent the message: "${received_message.text}".`
+            };
+            break;
+    }
+  }else {
     response = {
         "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
     }
