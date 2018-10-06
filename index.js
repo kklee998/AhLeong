@@ -7,7 +7,7 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()), // creates express http server
   PAGE_ACCESS_TOKEN = 'EAAP34enEWtgBAOpqWmZCmHNg5jhA5L1loWbcUZBPjB1WFTN98fM9KZBUq3gYR9oCENCIgLKKgSdDLxn2qwyGfmtWUrF6xcsjG0RuNJjZAzRslZAGajRinemCegK18apJXBeBRxz2BRlneF0asN9RdVm6AZAtZCL1Eh0ZBDRgO3M8xgZDZD';
-
+  app.use(express.static('public'));
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
@@ -170,7 +170,7 @@ function login(sender_psid) {
                 url: "ahleong.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
-                messenger_extensions: true
+                messenger_extensions: false
             }]
         }
     }
