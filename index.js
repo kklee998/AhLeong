@@ -4,6 +4,7 @@
 const
   request = require('request'),
   express = require('express'),
+  fs = require('fs'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()), // creates express http server
   PAGE_ACCESS_TOKEN = 'EAAP34enEWtgBAOpqWmZCmHNg5jhA5L1loWbcUZBPjB1WFTN98fM9KZBUq3gYR9oCENCIgLKKgSdDLxn2qwyGfmtWUrF6xcsjG0RuNJjZAzRslZAGajRinemCegK18apJXBeBRxz2BRlneF0asN9RdVm6AZAtZCL1Eh0ZBDRgO3M8xgZDZD';
@@ -65,6 +66,8 @@ app.post('/webhook', (req, res) => {
 
     if (webhook_event.message) {
       handleMessage(sender_psid, webhook_event.message);
+      write_json(webhook_event.message);
+
     } else if (webhook_event.postback) {
       handlePostback(sender_psid, webhook_event.postback);
     }
@@ -177,4 +180,10 @@ function login(sender_psid) {
   };
 
   return request_body;
+}
+
+function write_json(msg) {
+
+  let data = JSON.stringfy(msg);
+  fs.writeFileSync('data.json',data);
 }
