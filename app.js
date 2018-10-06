@@ -31,10 +31,10 @@ app.get('/login', (req, res, next) => {
 // Handle postback from webview
 app.post('/loginpostback', (req, res) => {
     let body = req.body;
-    console.log(body);
-    console.log(body.username);
-    console.log(body.password);
-    console.log(body.psid);
+    // console.log(body);
+    // console.log(body.username);
+    // console.log(body.password);
+    // console.log(body.psid);
     let response;
     if( body.username === 'admin' && body.password === 'admin123' ){
       response = {
@@ -124,6 +124,23 @@ function handleMessage(sender_psid, received_message) {
     switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
         case "login":
             response = login(sender_psid);
+            break;
+        case "hi":
+            response = {
+              "text": 'How can I help you?',
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Login",
+                  "payload":"LOGIN",
+                },
+                {
+                  "content_type":"text",
+                  "title":"Quick Balance",
+                  "payload":"BAL",
+                }
+              ]
+            };
             break;
         default:
             response = {
