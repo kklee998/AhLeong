@@ -171,7 +171,7 @@ function login(sender_psid) {
             text: "OK, let's log in to your Hong Leong Bank account first.",
             buttons: [{
                 type: "web_url",
-                url: "ahleong-kelvin.herokuapp.com/login",
+                url: "https://ahleong-kelvin.herokuapp.com/login",
                 title: "Login",
                 webview_height_ratio: "compact",
                 messenger_extensions: false
