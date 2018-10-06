@@ -271,20 +271,6 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
-  if(readChainNo(sender_psid) == '24'){
-    if(received_message.text.trim().match(/^[0-9]+$/) != null){
-      response1 = {
-        "text": 'Enter a description for this transaction.'
-      };
-      logChainNo(sender_psid, '25');
-    }else{
-      response1 = {
-        "text": 'Please enter numbers only.'
-      };
-      logChainNo(sender_psid, '24');
-    }
-  }
-
   if(readChainNo(sender_psid) == '25'){
     response1 = {
       "text": 'Do yo want to set a reminder for this transaction?' ,
@@ -303,6 +289,22 @@ function handleMessage(sender_psid, received_message) {
       };
   logChainNo(sender_psid, '26');
   }
+
+  if(readChainNo(sender_psid) == '24'){
+    if(received_message.text.trim().match(/^[0-9]+$/) != null){
+      response1 = {
+        "text": 'Enter a description for this transaction.'
+      };
+      logChainNo(sender_psid, '25');
+    }else{
+      response1 = {
+        "text": 'Please enter numbers only.'
+      };
+      logChainNo(sender_psid, '24');
+    }
+  }
+
+  
 
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
