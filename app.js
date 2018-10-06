@@ -142,24 +142,24 @@ function handleMessage(sender_psid, received_message) {
               ]
             };
             break;
+        case "bal":
         case "quick balance":
+          if(received_message.quick_replies.payload){
+            response = {
+              "text": "Your balance is 0! So poor!",
+              "quick_replies":[
+                {
+                  "content_type":"text",
+                  "title":"Login",
+                  "payload":"LOGIN",
+                }
+              ]
+            };
+          }else {
           response = "Your balance is 0! So poor!";
+        }
           break;
         default:
-            response = {
-                "text": `You sent the message: "${received_message.text}".`
-            };
-            break;
-    }
-  } else if(received_message.quick_replies) {
-    switch (received_message.quick_replies.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
-      case "login":
-        response = login(sender_psid);
-        break;
-      case "quick balance":
-        response = "Your balance is 0! So poor!";
-        break;
-      default:
             response = {
                 "text": `You sent the message: "${received_message.text}".`
             };
