@@ -67,7 +67,7 @@ app.post('/loginpostback', (req, res) => {
           response = {
             "text": 'Hi Admin!'
           };
-          handleMessage(body.psid, 'bal');
+          callSendAPI(sender_psid, {"text": "Your balance is 0! So poor!"});
           break;
         default:
           response = {
