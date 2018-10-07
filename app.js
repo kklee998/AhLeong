@@ -265,6 +265,19 @@ function handleMessage(sender_psid, received_message) {
   let response;
   let response1;
 
+  if(readChainNo(sender_psid) == '29'){
+  if(received_message.text.trim().match(/^[0-9]+$/) != null){
+    addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+    logChainNo(sender_psid, '23');
+  }else{
+      response1 = {
+        "text": 'Please enter numbers only.'
+      };
+      logChainNo(sender_psid, '29');
+    }
+
+}
+
   if(readChainNo(sender_psid) == '22'){
     if(checkIfSessionExists(sender_psid)){
       let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
@@ -347,19 +360,6 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
-if(readChainNo(sender_psid) == '29'){
-  if(received_message.text.trim().match(/^[0-9]+$/) != null){
-    addAccount(sender_psid + '_db', recipient_name, '1293800023983');
-    logChainNo(sender_psid, '23');
-  }else{
-      response1 = {
-        "text": 'Please enter numbers only.'
-      };
-      logChainNo(sender_psid, '29');
-    }
-
-}
-
 if(readChainNo(sender_psid) == '25'){
   if(received_message.text.trim().match('rental') != null){
           response1 = {
@@ -389,11 +389,11 @@ if(readChainNo(sender_psid) == '25'){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
               response = {
-                "text": 'Your balance is' + balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
+                "text": balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
               };
             } else {
               response = {
-                "text": 'Your balance is' + balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
+                "text": balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
               }
           }
         } else {
