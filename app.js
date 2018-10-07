@@ -29,6 +29,18 @@ app.get('/login', (req, res, next) => {
     }
 });
 
+app.get('/login2', (req, res, next) => {
+    let referer = req.get('Referer');
+    if (referer) {
+        if (referer.indexOf('www.messenger.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.messenger.com/');
+        } else if (referer.indexOf('www.facebook.com') >= 0) {
+            res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
+        }
+        res.sendFile('login2.html', {root: __dirname});
+    }
+});
+
 app.get('/location', (req, res, next) => {
     let referer = req.get('Referer');
     if (referer) {
@@ -49,7 +61,7 @@ app.post('/loginpostback', (req, res) => {
     // console.log(body.password);
     // console.log(body.psid);
     let response;
-    if( body.username === 'admin' && body.password === 'admin123' ){
+    if( body.username === 'ali' && body.password === 'admin123' ){
       switch(readChainNo(body.psid)){
         case '00':
           response = {
@@ -378,7 +390,10 @@ function handleMessage(sender_psid, received_message) {
               ]
             };
       }else{
-        response = login(sender_psid);
+         
+        checkDB(sender_psid + '_db');
+        response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
+        
         logChainNo(sender_psid, '00');
       }
     }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/transfer|pay/gi) != null){
@@ -674,6 +689,44 @@ function login(sender_psid) {
     }
   };
 
+
+
+  return request_body;
+  // Send the HTTP request to the Messenger Platform
+  // request({
+  //   "uri": "https://graph.facebook.com/v2.6/me/messages",
+  //   "qs": { "access_token": PAGE_ACCESS_TOKEN },
+  //   "method": "POST",
+  //   "json": request_body
+  // }, (err, res, body) => {
+  //   if (!err) {
+  //     console.log('message sent!')
+  //   } else {
+  //     console.error("Unable to send message:" + err);
+  //   }
+  // });
+}
+
+function login2(sender_psid) {
+  let request_body = {
+    attachment: {
+        type: "template",
+        payload: {
+            template_type: "button",
+            text: "OK, let's log in to your Hong Leong Bank account first.",
+            buttons: [{
+                type: "web_url",
+                url: "https://ahleong-kelvin.herokuapp.com/login2",
+                title: "Login",
+                webview_height_ratio: "tall",
+                messenger_extensions: true
+            }]
+        }
+    }
+  };
+
+
+
   return request_body;
   // Send the HTTP request to the Messenger Platform
   // request({
@@ -814,28 +867,6 @@ function bal(sender_psid) {
   }
 }
 
-function createFile(filename) {
-
-  var data =
-    {
-      "sender_psid" : "",
-      "logon" : 0,
-      "balance" : 1000,
-      "frequency" : 0,
-      "recepients" : {
-          "acc" : "",
-          "name": ""
-        }
-      };
-  fs.writeFileSync(filename,JSON.stringify(data));
-}
-
-function checkDB(filename) {
-  if (fs.existsSync(filename) == false) {
-    createFile(filename);
-  }
-}
-
 function reward(sender_psid) {
   callSendAPI(sender_psid, {"text":"Thanks for talking to Ah Leong", "sender_action":"typing_on"});
   callSendAPI(sender_psid, {"text":"Ah Leong will give you a pizza if you help me to make more friends!", "sender_action":"typing_on"});
@@ -874,4 +905,56 @@ function share() {
   }   
   return request_body;
 }
-//checkDB('test.json')
+
+function createFile(filename) {
+
+  var data =
+    {
+      "logon" : 0,
+      "balance" : 1000,
+      "frequency" : 0,
+      "recepients" : {
+          "acc" : "",
+          "name": ""
+        }
+      };
+  fs.writeFileSync(filename,JSON.stringify(data));
+}
+
+function checkDB(filename) {
+  if (fs.existsSync(filename) == false) {
+    createFile(filename);
+  }
+}
+
+function logonCounter(filename) {
+
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  //var data = Object.entries(data);
+  console.log(data);
+  return data.logon;
+
+}
+
+function logonAdder(checker,filename){
+
+  if (checker == 0) {
+    login(sender_psid);
+    console.log("apple");
+  }
+  else {
+    login2(sender_psid);
+    // login 2 here
+    console.log("bear");
+  }
+
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  var counter = data.logon+1;
+  console.log(counter);
+
+  data.logon=counter;
+
+  console.log(JSON.stringify(data));
+  fs.writeFileSync(filename,JSON.stringify(data));
+
+}
