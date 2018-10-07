@@ -266,10 +266,10 @@ function handleMessage(sender_psid, received_message) {
   let response1;
 
   if(readChainNo(sender_psid) == '29'){
-  if(received_message.text.trim().match(/^[0-9]+$/) != null){
-    addAccount(sender_psid + '_db', recipient_name, '1293800023983');
-    logChainNo(sender_psid, '23');
-  }else{
+    if(received_message.text.trim().match(/^[0-9]+$/) != null){
+      addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+      logChainNo(sender_psid, '22');
+    }else{
       response1 = {
         "text": 'Please enter numbers only.'
       };
