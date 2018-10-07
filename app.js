@@ -268,7 +268,7 @@ function handleMessage(sender_psid, received_message) {
   if(readChainNo(sender_psid) == '22'){
     if(checkIfSessionExists(sender_psid)){
       let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
-      if(checkIfAccNoExists()){
+      if(readAccount(sender_psid + '_db', recipient_name)){
         logChainNo(sender_psid, '23');
         response1 = {
               "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
@@ -285,8 +285,14 @@ function handleMessage(sender_psid, received_message) {
                 }
               ]
             };
-      }
-    }else{
+      }else {
+        logChainNo(sender_psid, '29');
+        addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+        response1 = {
+          "text": 'Recipient account not found in your contacts, please enter user account number.'
+        }
+    }
+  }else{
       logChainNo(sender_psid, '21');
         response1 = {
             attachment: {
@@ -340,6 +346,19 @@ function handleMessage(sender_psid, received_message) {
       logChainNo(sender_psid, '24');
     }
   }
+
+if(readChainNo(sender_psid) == '29'){
+  if(received_message.text.trim().match(/^[0-9]+$/) != null){
+    addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+    logChainNo(sender_psid, '23');
+  }else{
+      response1 = {
+        "text": 'Please enter numbers only.'
+      };
+      logChainNo(sender_psid, '29');
+    }
+
+}
 
 if(readChainNo(sender_psid) == '25'){
   if(received_message.text.trim().match('rental') != null){
@@ -535,6 +554,11 @@ if(readChainNo(sender_psid) == '25'){
                 }
               ]
             };
+    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/remind/gi) != null){
+      response = {
+              "text": 'You reminder has been set.',
+            };
+      onTimeOut(remind, 120000, sender_psid);
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/yes|yea|yup|sure/gi) != null){
       if(readChainNo(sender_psid) == '23'){
         response = {
@@ -867,10 +891,6 @@ function logout(sender_psid){
   fs.unlinkSync(sender_psid + '.json');
 }
 
-function checkIfAccNoExists(){
-  return true;
-}
-
 function bal(sender_psid) {
   var jsonData = require('./' + sender_psid + '_db.json');
   //var test = JSON.stringify(jsonData)
@@ -1021,20 +1041,34 @@ function transferMoney(filename,amount) {
     return 'Insufficient funds, transaction invalid!';
   }
 }
-function readAccount(filename,accountNumber,recepientsName) {
+
+function readAccount(filename, recepientsName) {
 
   var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
 
   if (data.recepients.name != recepientsName) {
     console.log("bar");
-    data.recepients.acc = accountNumber;
-    data.recepients.name = recepientsName;
-    console.log(JSON.stringify(data)+"ADDITION IS SUCCESSFUL!");
-    fs.writeFileSync(filename,JSON.stringify(data));
-    return {'text': recepientsName + 'has been added to your common contacts'}
+    return false
   }else{
     console.log("this is something else");
+    return true
   }
+}
+
+function addAccount(filename, recepientsName, accountNumber){
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  data.recepients.name = recepientsName;
+  data.recepients.acc = accountNumber;
+  console.log(JSON.stringify(data)+"ACCOUNT IS ADDED SUCCESSFULLY!");
+  fs.writeFileSync(filename,JSON.stringify(data));
+
+}
+
+function remind(sender_psid) {
+  let request_body = {
+    "text": 'You bill for Ahmad is due tomorrow.'
+  };
+  callSendAPI(sender_psid, request_body);
 }
 
 function pin(sender_psid) {
