@@ -281,10 +281,10 @@ function handleMessage(sender_psid, received_message) {
   if(readChainNo(sender_psid) == '22'){
     if(checkIfSessionExists(sender_psid)){
       let recipient_name = received_message.text.replace(/[^\w\s]/gi, '').trim();
-      if(readAccount(sender_psid + '_db', recipient_name)){
+      if(readAccount(sender_psid + '_db', 'Beng')){
         logChainNo(sender_psid, '23');
         response1 = {
-              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 6969420' ,
+              "text": 'Recipient Name: ' + 'Beng' + ', ' + 'Account Number: 6969420' ,
               "quick_replies":[
                 {
                   "content_type":"text",
