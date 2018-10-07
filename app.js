@@ -68,11 +68,11 @@ app.get('/location', (req, res, next) => {
 // Handle postback from webview
 app.get('/pinpostback', (req, res) => {
     let body = req.query; 
-    if(logonCounter(sender_psid + '_db')>1){
-       reward(sender_psid);
+    if(logonCounter(body.psid + '_db')>1){
+       reward(body.psid);
     }
     let response = { "text": 'Thank you for using our service!' };
-
+    console.log(body.psid);
     callSendAPI(body.psid, response);
 });
 
