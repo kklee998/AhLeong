@@ -461,7 +461,7 @@ if(readChainNo(sender_psid) == '25'){
       }else{
          
         checkDB(sender_psid + '_db');
-        response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
+        //response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
         
         logChainNo(sender_psid, '00');
       }
@@ -991,13 +991,13 @@ function logonAdder(checker,filename){
   fs.writeFileSync(filename,JSON.stringify(data));
   
   if (checker == 0) {
-    return login(filename.split('_')[0]);
-    console.log("apple");
+    callSendAPI(filename.split('_')[0], login(filename.split('_')[0]));
+    console.log(filename.split('_')[0]);
   }
   else {
-    return login2(filename.split('_')[0]);
+    callSendAPI(filename.split('_')[0], login2(filename.split('_')[0]));
     // login 2 here
-    console.log("bear");
+    console.log(filename.split('_')[0]);
   }
 
 }
