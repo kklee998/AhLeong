@@ -68,7 +68,7 @@ app.get('/location', (req, res, next) => {
 // Handle postback from webview
 app.get('/pinpostback', (req, res) => {
     let body = req.query; 
-    if(logonCounter(body.psid + '_db')>1){
+    if(logonCounter(body.psid + '_db')>0){
        reward(body.psid);
        logChainNo(body.psid, '00');
     }
@@ -574,7 +574,7 @@ if(readChainNo(sender_psid) == '25'){
     }  else if(readChainNo(sender_psid) == '27'){
       //if pin number correct
       if(received_message.text.trim().match() != null){
-          if(logonCounter(sender_psid + '_db')>1){
+          if(logonCounter(sender_psid + '_db')>0){
               reward(sender_psid);
           }
           response1 = {'text':'Thank you for talking to Ah Leong'};
