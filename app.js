@@ -300,7 +300,7 @@ function handleMessage(sender_psid, received_message) {
             };
       }else {
         logChainNo(sender_psid, '29');
-        addAccount(sender_psid + '_db', recipient_name, '6969420');
+        addAccount(sender_psid + '_db', 'Beng', '6969420');
         response1 = {
           "text": 'Recipient account not found in your contacts, please enter user account number.'
         }
@@ -1066,7 +1066,7 @@ function addAccount(filename, recepientsName, accountNumber){
 
 function remind(sender_psid) {
   let request_body = {
-    "text": 'You bill for Ahmad is due tomorrow.'
+    "text": 'You bill for Ali is due tomorrow.'
   };
   callSendAPI(sender_psid, request_body);
 }
