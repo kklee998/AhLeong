@@ -933,7 +933,7 @@ function share() {
             "title":"Your friend just got a free pizza!",
             "subtitle":"Ah Leong wants to make more friends",
             "image_url":"https://cdn.pixabay.com/photo/2017/01/03/11/33/pizza-1949183_960_720.jpg",
-            "buttons": [
+            "buttons": [{
 			  "type": "element_share",
 			  "share_contents": { 
 				  "attachment": {
