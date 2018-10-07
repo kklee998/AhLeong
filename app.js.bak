@@ -954,13 +954,19 @@ function share() {
                       "url": "http://m.me/ahleongmy", 
                       "title": "Claim the pizza"
                   }
-                  ]
-              }
-              ]
-              }
-          }
-      }   
-  }   
+					]
+					}
+					]
+					}
+				}
+				}
+			}
+			]
+			}	
+		]			
+  };   
+		}
+  }
   return request_body;
 }
 

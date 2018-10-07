@@ -964,9 +964,9 @@ function share() {
 			]
 			}	
 		]			
-  };   
+  }   
 		}
-  }
+  };
   return request_body;
 }
 
