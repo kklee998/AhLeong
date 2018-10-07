@@ -369,9 +369,8 @@ function handleMessage(sender_psid, received_message) {
       }
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/savings|saving/gi) != null){
       if(checkIfSessionExists(sender_psid)){
-      response = {
-          "text": 'Savings account:',
-          //bal(sender_psid);
+        response = {
+          "text": 'Savings account:' + balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
           };
       }else{
       response = login(sender_psid);
@@ -939,11 +938,11 @@ function logonCounter(filename) {
 function logonAdder(checker,filename){
 
   if (checker == 0) {
-    login(filename.replace('_db'));
+    return login(filename.replace('_db'));
     console.log("apple");
   }
   else {
-    login2(filename.replace('_db'));
+    return login2(filename.replace('_db'));
     // login 2 here
     console.log("bear");
   }
@@ -957,4 +956,30 @@ function logonAdder(checker,filename){
   console.log(JSON.stringify(data));
   fs.writeFileSync(filename,JSON.stringify(data));
 
+}
+
+function balanceCounter(filename){
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  //var data = Object.entries(data);
+  console.log(data);
+  return data.frequency;
+}
+
+function balanceAdder(checker,filename){
+
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  if (checker < 2) {
+
+    var counter = data.frequency+1;
+    data.frequency = counter;
+    console.log(JSON.stringify(data));
+    fs.writeFileSync(filename,JSON.stringify(data));
+    return "Your account balance is " + data.balance;
+  }
+  else {
+    data.frequency = 0;
+    console.log(JSON.stringify(data));
+    fs.writeFileSync(filename,JSON.stringify(data));
+    return "Your account balance is " + data.balance + "Hi, you seem to check your balance a lot. You can type 'b' to check it quickly next time.";
+  }
 }
