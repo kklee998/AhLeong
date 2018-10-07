@@ -66,6 +66,13 @@ app.get('/location', (req, res, next) => {
 });
 
 // Handle postback from webview
+app.get('/pinpostback', (req, res) => {
+    let body = req.query; 
+    let response = { "text": 'Thank you for using our service!' };
+    
+    callSendAPI(body.psid, response);
+});
+
 app.post('/loginpostback', (req, res) => {
     let body = req.body;
     // console.log(body);
@@ -74,8 +81,7 @@ app.post('/loginpostback', (req, res) => {
     // console.log(body.psid);
     let response;
     if( body.username === 'ali' && body.password === 'admin123' ){
-      checkDB(sender_psid + '_db');
-      logonAdder(logonCounter(body.psid + '_db'), body.psid + '_db');
+      
       switch(readChainNo(body.psid)){
         case '00':
           response = {
@@ -405,8 +411,8 @@ function handleMessage(sender_psid, received_message) {
             };
       }else{
          
-        
-        //response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
+        checkDB(sender_psid + '_db');
+        response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
         
         logChainNo(sender_psid, '00');
       }
@@ -944,6 +950,15 @@ function logonCounter(filename) {
 
 function logonAdder(checker,filename){
 
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  var counter = data.logon+1;
+  console.log(counter);
+
+  data.logon=counter;
+
+  console.log(JSON.stringify(data));
+  fs.writeFileSync(filename,JSON.stringify(data));
+  
   if (checker == 0) {
     return login(filename.replace('_db'));
     console.log("apple");
@@ -953,15 +968,6 @@ function logonAdder(checker,filename){
     // login 2 here
     console.log("bear");
   }
-
-  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
-  var counter = data.logon+1;
-  console.log(counter);
-
-  data.logon=counter;
-
-  console.log(JSON.stringify(data));
-  fs.writeFileSync(filename,JSON.stringify(data));
 
 }
 

