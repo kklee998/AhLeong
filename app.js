@@ -267,7 +267,7 @@ function handleMessage(sender_psid, received_message) {
 
   if(readChainNo(sender_psid) == '29'){
     if(received_message.text.trim().match(/^[0-9]+$/) != null){
-      addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+      addAccount(sender_psid + '_db', 'Beng', '6969420');
       logChainNo(sender_psid, '22');
     }else{
       response1 = {
@@ -284,7 +284,7 @@ function handleMessage(sender_psid, received_message) {
       if(readAccount(sender_psid + '_db', recipient_name)){
         logChainNo(sender_psid, '23');
         response1 = {
-              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 1293800023983' ,
+              "text": 'Recipient Name: ' + recipient_name + ', ' + 'Account Number: 6969420' ,
               "quick_replies":[
                 {
                   "content_type":"text",
@@ -300,7 +300,7 @@ function handleMessage(sender_psid, received_message) {
             };
       }else {
         logChainNo(sender_psid, '29');
-        addAccount(sender_psid + '_db', recipient_name, '1293800023983');
+        addAccount(sender_psid + '_db', recipient_name, '6969420');
         response1 = {
           "text": 'Recipient account not found in your contacts, please enter user account number.'
         }
