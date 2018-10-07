@@ -62,6 +62,8 @@ app.post('/loginpostback', (req, res) => {
     // console.log(body.psid);
     let response;
     if( body.username === 'ali' && body.password === 'admin123' ){
+      checkDB(sender_psid + '_db');
+      logonAdder(logonCounter(body.psid + '_db'), body.psid + '_db');
       switch(readChainNo(body.psid)){
         case '00':
           response = {
@@ -144,6 +146,7 @@ app.post('/loginpostback', (req, res) => {
            createSession(body.psid);
            logChainNo(body.psid, '00');
         }else{
+
           createSession(body.psid);
           logChainNo(body.psid, '00');
         }
@@ -390,8 +393,8 @@ function handleMessage(sender_psid, received_message) {
             };
       }else{
          
-        checkDB(sender_psid + '_db');
-        response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
+        
+        //response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
         
         logChainNo(sender_psid, '00');
       }
