@@ -917,8 +917,8 @@ function bal(sender_psid) {
 }
 
 function reward(sender_psid) {
-  callSendAPI(sender_psid, {"text":"Thanks for talking to Ah Leong", "sender_action":"typing_on"});
-  callSendAPI(sender_psid, {"text":"Ah Leong will give you a pizza if you help me to make more friends!", "sender_action":"typing_on"});
+  callSendAPI(sender_psid, {"text":"Thanks for talking to Ah Leong"});
+  callSendAPI(sender_psid, {"text":"Ah Leong will give you a pizza if you help me to make more friends!"});
   callSendAPI(sender_psid, share());
 }
 
