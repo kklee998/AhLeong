@@ -558,7 +558,7 @@ if(readChainNo(sender_psid) == '25'){
       response = {
               "text": 'You reminder has been set.',
             };
-      onTimeOut(remind, 120000, sender_psid);
+      setTimeOut(remind, 120000, sender_psid);
     } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/yes|yea|yup|sure/gi) != null){
       if(readChainNo(sender_psid) == '23'){
         response = {
