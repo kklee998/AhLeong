@@ -991,11 +991,11 @@ function logonAdder(checker,filename){
   fs.writeFileSync(filename,JSON.stringify(data));
   
   if (checker == 0) {
-    return login(filename.replace('_db'));
+    return login(filename.split('_')[0]);
     console.log("apple");
   }
   else {
-    return login2(filename.replace('_db'));
+    return login2(filename.split('_')[0]);
     // login 2 here
     console.log("bear");
   }
