@@ -939,11 +939,11 @@ function logonCounter(filename) {
 function logonAdder(checker,filename){
 
   if (checker == 0) {
-    login(filename.replace('_db');
+    login(filename.replace('_db'));
     console.log("apple");
   }
   else {
-    login(filename.replace('_db');
+    login2(filename.replace('_db'));
     // login 2 here
     console.log("bear");
   }
