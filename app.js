@@ -68,8 +68,11 @@ app.get('/location', (req, res, next) => {
 // Handle postback from webview
 app.get('/pinpostback', (req, res) => {
     let body = req.query; 
+    if(logonCounter(sender_psid + '_db')>1){
+       reward(sender_psid);
+    }
     let response = { "text": 'Thank you for using our service!' };
-    
+
     callSendAPI(body.psid, response);
 });
 
@@ -337,15 +340,41 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
+if(readChainNo(sender_psid) == '25'){
+  if(received_message.text.trim().match('rental') != null){
+          response1 = {
+          "text": 'Do yo want to set a reminder for this transaction?' ,
+              "quick_replies":[
+              {
+                  "content_type":"text",
+                  "title":"Yes",
+                  "payload":"YES",
+              },
+              {
+                  "content_type":"text",
+                  "title":"No",
+                  "payload":"NO",
+              }
+              ]
+          };
+          logChainNo(sender_psid, '26');
+      } else{
+          reponse1 = pin(sender_psid);
+          logChainNo(sender_psid, '00');
+      }
+  }
+
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null || received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase() == 'b'){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
               response = {
-                "text": 'Your balance is 0! So poor!',
+                "text": 'Your balance is' + balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
               };
             } else {
-              response = {"text": "Your balance is 0! So poor!"};
+              response = {
+                "text": 'Your balance is' + balanceAdder(balanceCounter(sender_psid + '_db'), sender_psid + '_db')
+              }
           }
         } else {
           logChainNo(sender_psid, '10');
@@ -515,29 +544,7 @@ function handleMessage(sender_psid, received_message) {
         response = pin(sender_psid);
         logChainNo(sender_psid, '27');
       }
-    } else if(readChainNo(sender_psid) == '25'){
-      if(received_message.text.trim().match('rental') != null){
-          response1 = {
-          "text": 'Do yo want to set a reminder for this transaction?' ,
-              "quick_replies":[
-              {
-                  "content_type":"text",
-                  "title":"Yes",
-                  "payload":"YES",
-              },
-              {
-                  "content_type":"text",
-                  "title":"No",
-                  "payload":"NO",
-              }
-              ]
-          };
-          logChainNo(sender_psid, '26');
-      } else{
-          reponse1 = pin(sender_psid);
-          logChainNo(sender_psid, '27');
-      }
-  } else if(readChainNo(sender_psid) == '27'){
+    }  else if(readChainNo(sender_psid) == '27'){
       //if pin number correct
       if(received_message.text.trim().match() != null){
           if(logonCounter(sender_psid + '_db')>1){
@@ -547,18 +554,16 @@ function handleMessage(sender_psid, received_message) {
       }
   } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/no|nope/gi) != null){
       if(readChainNo(sender_psid) == '26'){
-        response = pin(sender_psid);
-        logChainNo(sender_psid, '27');
+        //response = pin(sender_psid);
+        response = {"text": "What else I can help you?"};
+        logChainNo(sender_psid, '00');
       }
     } else {
       response = {
         "text": 'I am sorry, I don\'t quite understand what you meant.'
       };
-      if(readChainNo(sender_psid) != '44' && readChainNo(sender_psid) != '444'){
-        logChainNo(sender_psid, '44');
-      }
 
-      if(readChainNo(sender_psid) == '44'){
+       if(readChainNo(sender_psid) == '44'){
         logChainNo(sender_psid, '444');
         response = {
           "text": 'Sorry, I am still very bad at this, should I get some help for you?'
@@ -573,6 +578,11 @@ function handleMessage(sender_psid, received_message) {
           };
           logChainNo(sender_psid, '4444');
       }
+      if(readChainNo(sender_psid) != '44' && readChainNo(sender_psid) != '444'){
+        logChainNo(sender_psid, '44');
+      }
+
+     
     }
   }
 
