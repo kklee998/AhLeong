@@ -304,13 +304,11 @@ function handleMessage(sender_psid, received_message) {
     }
   }
 
-  
-
   if(received_message.text){
     if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
-              respons = {
+              response = {
                 "text": 'Your balance is 0! So poor!',
               };
             } else {
@@ -357,7 +355,7 @@ function handleMessage(sender_psid, received_message) {
       response = login(sender_psid);
       logChainNo(sender_psid, '30');
       }
-  } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/savings|saving/gi) != null){
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/savings|saving/gi) != null){
       if(checkIfSessionExists(sender_psid)){
       response = {
           "text": 'Savings account:',
@@ -367,7 +365,7 @@ function handleMessage(sender_psid, received_message) {
       response = login(sender_psid);
       logChainNo(sender_psid, '31');
       }
-  } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
+    } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/login|log in/gi) != null){
       if(checkIfSessionExists(sender_psid)){
         response = {
           "text": 'It seems like you have already logged into an account, do you want to log out?',
@@ -428,6 +426,7 @@ function handleMessage(sender_psid, received_message) {
                         messenger_extensions: true
                     }]
                 }
+
             }
           };
       }
@@ -526,10 +525,27 @@ function handleMessage(sender_psid, received_message) {
       }
     } else {
       response = {
-        "text": 'Sorry, I don\'t understand what you mean. Do you want to talk to a real person?'
+        "text": 'I am sorry, I don\'t quite understand what you meant.'
+      };
+      logChainNo(sender_psid, '44');
+
+      if(readChainNo(sender_psid) == '44'){
+        logChainNo(sender_psid, '444');
+        response = {
+          "text": 'Sorry, I am still very bad at this, should I get some help for you?.'
+        };
+      }else if(readChainNo(sender_psid) == '444'){
+          response = {
+            "text": 'Hi, I am Michael Lee Choon Sheng, what can I help you with?'
+          };
+          logChainNo(sender_psid, '4444');
+      }else{
+        console.log('lol bug');
       }
-    };
+    }
   }
+
+
   //   switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
   //       case "login":
   //           response = login(sender_psid);
@@ -709,12 +725,42 @@ function createSession(sender_psid) {
     table: []
   };
 
-  obj.table.push({sender_id: sender_psid, timestamp: Date.now()});
+  obj.table.push({sender_id: sender_psid, timestamp: Date.now(), failed_counter: 0});
   var json = JSON.stringify(obj);
 
   //var fs = require('fs');
   fs.writeFileSync(sender_psid + '.json', json);
 
+}
+
+function updateSessionFailed(sender_psid, new_failed_counter) {
+  var obj = {
+    table: []
+  };
+
+  obj.table.push({sender_id: sender_psid, timestamp: Date.now(), failed_counter: new_failed_counter});
+  var json = JSON.stringify(obj);
+
+  //var fs = require('fs');
+  fs.writeFileSync(sender_psid + '.json', json);
+
+}
+
+function getFailedCounter(sender_psid) {
+  console.log(fs.existsSync(sender_psid + '.json'));
+  if(fs.existsSync(sender_psid + '.json')){
+    var jsonData = JSON.parse(fs.readFileSync(sender_psid + '.json', 'utf8'));
+      //var test = JSON.stringify(jsonData)
+    console.log(jsonData);
+    console.log(jsonData.table[0].failed_counter);
+    if(jsonData.table[0].failed_counter){
+      return jsonData.table[0].failed_counter;
+    }else{
+      return 0;
+    }
+  }else{
+    
+  }
 }
 
 function checkIfSessionExists(sender_psid){
