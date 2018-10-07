@@ -527,21 +527,21 @@ function handleMessage(sender_psid, received_message) {
       response = {
         "text": 'I am sorry, I don\'t quite understand what you meant.'
       };
-      if(readChainNo(sender_psid) != '44' || readChainNo(sender_psid) != '444'){
+      if(readChainNo(sender_psid) != '44' && readChainNo(sender_psid) != '444'){
         logChainNo(sender_psid, '44');
       }
 
       if(readChainNo(sender_psid) == '44'){
         logChainNo(sender_psid, '444');
         response = {
-          "text": 'Sorry, I am still very bad at this, should I get some help for you?.'
+          "text": 'Sorry, I am still very bad at this, should I get some help for you?'
         };
       }else if(readChainNo(sender_psid) == '444'){
           response = {
-            "pass_thread_control":{
-              "target_app_id":263902037430900,
-              "metadata":"String to pass to secondary receiver app" 
-          },
+          //   "pass_thread_control":{
+          //     "target_app_id":263902037430900,
+          //     "metadata":"String to pass to secondary receiver app" 
+          // },
             "text": 'Hi, I am Michael Lee Choon Sheng, what can I help you with?'
           };
           logChainNo(sender_psid, '4444');
