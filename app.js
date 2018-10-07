@@ -578,7 +578,7 @@ if(readChainNo(sender_psid) == '25'){
           };
           logChainNo(sender_psid, '4444');
       }
-      if(readChainNo(sender_psid) != '44' && readChainNo(sender_psid) != '444'){
+      if(readChainNo(sender_psid) == '44' && readChainNo(sender_psid) != '444'){
         logChainNo(sender_psid, '44');
       }
 
@@ -1004,6 +1004,35 @@ function balanceAdder(checker,filename){
     console.log(JSON.stringify(data));
     fs.writeFileSync(filename,JSON.stringify(data));
     return "Your account balance is " + data.balance + "Hi, you seem to check your balance a lot. You can type 'b' to check it quickly next time.";
+  }
+}
+
+function transferMoney(filename,amount) {
+
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+  if (amount <= data.balance) {
+    data.balance = data.balance - amount;
+    console.log(JSON.stringify(data)+"TRANSACTION IS SUCCESSFUL!");
+    fs.writeFileSync(filename,JSON.stringify(data));
+
+    return {'text': 'The transaction is successful, theres is now' + data.balance +'in your account balance'}
+  }else{
+    return {'text':'Insufficient funds, transaction invalid!'}
+  }
+}
+function readAccount(filename,accountNumber,recepientsName) {
+
+  var data = JSON.parse(fs.readFileSync(filename,'utf-8'));
+
+  if (data.recepients.name != recepientsName) {
+    console.log("bar");
+    data.recepients.acc = accountNumber;
+    data.recepients.name = recepientsName;
+    console.log(JSON.stringify(data)+"ADDITION IS SUCCESSFUL!");
+    fs.writeFileSync(filename,JSON.stringify(data));
+    return {'text': recepientsName + 'has been added to your common contacts'}
+  }else{
+    console.log("this is something else");
   }
 }
 
