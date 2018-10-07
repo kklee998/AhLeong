@@ -7,7 +7,7 @@ const
   fs = require('fs'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()), // creates express http server
-  PAGE_ACCESS_TOKEN = 'EAAGuJTXP2QQBAMoWhL0zpguFTrajlWKUZCnmtZC676dzHAytGQZAeYKFdx8M05aM41lWAVtoSWWsDgLhwadgs7FhABnMILnBskWqXCI7qgA7JgliYDwU6j5XeFQG8Bw7O1QwfJR9FiFpudZAmy305VUO6ZCOXAyQgkYAeYzI2fgZDZD';
+  PAGE_ACCESS_TOKEN = 'EAAP34enEWtgBAPSQUlztUAUsuwlGwlk9NBvpGOUGPPGG4juZCGgZCaP1Rzbt320oaJHvb7Ueb3eXBQvGscGL9fB0iiHWuRK9IGEZBJLnlOFxHX5Wm6B1x5I0vfJLsk5vffXNtSj2F4QkIFfOY2Dv1U1yxZC2lLfLZBuVwQ5YDZCgZDZD';
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -236,7 +236,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "EAAGuJTXP2QQBAMoWhL0zpguFTrajlWKUZCnmtZC676dzHAytGQZAeYKFdx8M05aM41lWAVtoSWWsDgLhwadgs7FhABnMILnBskWqXCI7qgA7JgliYDwU6j5XeFQG8Bw7O1QwfJR9FiFpudZAmy305VUO6ZCOXAyQgkYAeYzI2fgZDZD"
+  let VERIFY_TOKEN = "EAAP34enEWtgBAPSQUlztUAUsuwlGwlk9NBvpGOUGPPGG4juZCGgZCaP1Rzbt320oaJHvb7Ueb3eXBQvGscGL9fB0iiHWuRK9IGEZBJLnlOFxHX5Wm6B1x5I0vfJLsk5vffXNtSj2F4QkIFfOY2Dv1U1yxZC2lLfLZBuVwQ5YDZCgZDZD"
     
   // Parse the query params
   let mode = req.query['hub.mode'];
