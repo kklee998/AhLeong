@@ -305,7 +305,7 @@ function handleMessage(sender_psid, received_message) {
   }
 
   if(received_message.text){
-    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null || received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match('b') != null){
+    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null || received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase() == 'b'){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
               response = {
@@ -527,7 +527,9 @@ function handleMessage(sender_psid, received_message) {
       response = {
         "text": 'I am sorry, I don\'t quite understand what you meant.'
       };
-      logChainNo(sender_psid, '44');
+      if(readChainNo(sender_psid != '44'){
+        logChainNo(sender_psid, '44');
+      }
 
       if(readChainNo(sender_psid) == '44'){
         logChainNo(sender_psid, '444');
@@ -536,11 +538,13 @@ function handleMessage(sender_psid, received_message) {
         };
       }else if(readChainNo(sender_psid) == '444'){
           response = {
+            "pass_thread_control":{
+              "target_app_id":263902037430900,
+              "metadata":"String to pass to secondary receiver app" 
+          },
             "text": 'Hi, I am Michael Lee Choon Sheng, what can I help you with?'
           };
           logChainNo(sender_psid, '4444');
-      }else{
-        console.log('lol bug');
       }
     }
   }
@@ -832,4 +836,36 @@ function checkDB(filename) {
   }
 }
 
+function share() {
+  let request_body = {
+      "type": "element_share",
+      "share_contents": { 
+          "attachment": {
+          "type": "template",
+          "payload": {
+              "template_type": "generic",
+              "elements": [
+              {
+                  "title": "Your friend just got a free pizza!",
+                  "subtitle": "Ah Leong wants to make more friends",
+                  "image_url": "https://cdn.pixabay.com/photo/2017/01/03/11/33/pizza-1949183_960_720.jpg",
+                  "default_action": {
+                  "type": "web_url",
+                  "url": "http://m.me/ahleongmy"
+                  },
+                  "buttons": [
+                  {
+                      "type": "web_url",
+                      "url": "http://m.me/ahleongmy", 
+                      "title": "Claim the pizza"
+                  }
+                  ]
+              }
+              ]
+              }
+          }
+      }   
+  }   
+  return request_body;
+}
 //checkDB('test.json')
