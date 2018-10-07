@@ -305,7 +305,7 @@ function handleMessage(sender_psid, received_message) {
   }
 
   if(received_message.text){
-    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null){
+    if(received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/balance|bal/gi) != null || received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match('b') != null){
       if(checkIfSessionExists(sender_psid)){
         if(received_message.quick_reply){
               response = {
