@@ -461,7 +461,7 @@ if(readChainNo(sender_psid) == '25'){
       }else{
          
         checkDB(sender_psid + '_db');
-        //response = logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
+        logonAdder(logonCounter(sender_psid + '_db'), sender_psid + '_db');
         
         logChainNo(sender_psid, '00');
       }
