@@ -527,7 +527,7 @@ function handleMessage(sender_psid, received_message) {
       response = {
         "text": 'I am sorry, I don\'t quite understand what you meant.'
       };
-      if(readChainNo(sender_psid) != '44'){
+      if(readChainNo(sender_psid) != '44' || readChainNo(sender_psid) != '444'){
         logChainNo(sender_psid, '44');
       }
 
