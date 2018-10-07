@@ -1,0 +1,109 @@
+<html>
+<head>
+    <title>Hong Leong Bank Login</title>
+</head>
+<body>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'Messenger'));
+    window.extAsyncInit = () => {
+
+        // TODO: How to parse env file from here?
+        MessengerExtensions.getSupportedFeatures(function success(result) {
+            let features = result.supported_features;
+            if (features.includes("context")) {
+                MessengerExtensions.getContext("472949816547588",
+                    function success(thread_context) {
+                        // success
+                        document.getElementById('sender_psid').value = thread_context.psid;
+                        console.log(thread_context.psid);
+                    },
+                    function error(err) {
+                        // error
+                        console.log(err);
+                    }
+                );
+            }
+        }, function error(err) {
+            // error retrieving supported features
+            console.log(err);
+        });
+        document.getElementById('submitButton').addEventListener('click', () => {
+            MessengerExtensions.requestCloseBrowser(function success() {
+                console.log("Webview closing");
+            }, function error(err) {
+                console.log(err);
+            });
+        });
+    };
+</script>
+<style id="login_background">
+    .skyblue {
+        background-color: #134077 !important;
+        height: 1500px;
+        width: 972px;
+    }
+
+    .span {
+        background-size: 60px 75px;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 45px;
+        color: white;
+        margin-top: 8px;
+        margin-bottom: 20px;
+    } 			
+
+    .box {
+        border-radius: 3px;
+        border-color: transparent;
+        font-size: 40px;
+        width: 750px;
+        height: 90px;
+    }
+
+    .button {
+        background-color: rgb(132, 195, 79); 
+        color: ghostwhite; 
+        font-weight: bold;
+        font-size: 40px;
+        border-radius: 3px;
+        border-color: transparent;
+        width: 750px;
+        height: 90px;
+        margin-top: 10px;
+    }
+
+    .logo {
+        background  : url(https://s.hongleongconnect.my/rib/img/connect-logo-white.png) no-repeat center;
+        background-size: 50%;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 400px;
+        padding: 50px;
+    }
+</style>
+<div id="login_background" class="skyblue" align="center">
+    <div class="logo"></div>
+    <div style="margin-left:675px;position:relative;color:#fff;right:110px;bottom:75px;font-size: 40px;font-family:Arial, Helvetica, sans-serif;">
+        <label>Online Banking</label>
+    </div>
+    <form name="form1"> 
+        <div class="span">
+            <label>Enter PIN Number</label>
+        </div>
+        <input type="text"  name="pincode" maxlength="4"  id="pin" pattern="\d{4}" required/>
+        <br>
+        <input class="button" type="Submit" value="Submit" id="submitButton"/> 
+    </form>
+</div>
+</body>
+</html>

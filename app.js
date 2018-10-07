@@ -29,6 +29,18 @@ app.get('/login', (req, res, next) => {
     }
 });
 
+app.get('/pin', (req, res, next) => {
+  let referer = req.get('Referer');
+  if (referer) {
+      if (referer.indexOf('www.messenger.com') >= 0) {
+          res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.messenger.com/');
+      } else if (referer.indexOf('www.facebook.com') >= 0) {
+          res.setHeader('X-Frame-Options', 'ALLOW-FROM https://www.facebook.com/');
+      }
+      res.sendFile('pin.html', {root: __dirname});
+  }
+});
+
 app.get('/login2', (req, res, next) => {
     let referer = req.get('Referer');
     if (referer) {
@@ -494,51 +506,43 @@ function handleMessage(sender_psid, received_message) {
         };
         logChainNo(sender_psid, '24');
       } else if(readChainNo(sender_psid) == '26'){
-        response = {
-                "text": 'Alright, the reminder has been set.',
-                "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Check Balance",
-                  "payload":"BAL",
-                },
-                {
-                  "content_type":"text",
-                  "title":"Transfer Money",
-                  "payload":"TRANSFER_MONEY",
-                },
-                {
-                  "content_type":"text",
-                  "title":"View Account",
-                  "payload":"VIEW_ACCOUNT",
-                }
-              ]
-        };
-        logChainNo(sender_psid, '00');
+        response = pin(sender_psid);
+        logChainNo(sender_psid, '27');
       }
-    }else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/no|nope/gi) != null){
-      if(readChainNo(sender_psid) == '26'){
-        response = {
-                "text": 'Alright, no reminder is set.',
-                "quick_replies":[
-                {
+    } else if(readChainNo(sender_psid) == '25'){
+      if(received_message.text.trim().match('rental') != null){
+          response1 = {
+          "text": 'Do yo want to set a reminder for this transaction?' ,
+              "quick_replies":[
+              {
                   "content_type":"text",
-                  "title":"Check Balance",
-                  "payload":"BAL",
-                },
-                {
+                  "title":"Yes",
+                  "payload":"YES",
+              },
+              {
                   "content_type":"text",
-                  "title":"Transfer Money",
-                  "payload":"TRANSFER_MONEY",
-                },
-                {
-                  "content_type":"text",
-                  "title":"View Account",
-                  "payload":"VIEW_ACCOUNT",
-                }
+                  "title":"No",
+                  "payload":"NO",
+              }
               ]
-        };
-        logChainNo(sender_psid, '00');
+          };
+          logChainNo(sender_psid, '26');
+      } else{
+          reponse1 = pin(sender_psid);
+          logChainNo(sender_psid, '27');
+      }
+  } else if(readChainNo(sender_psid) == '27'){
+      //if pin number correct
+      if(received_message.text.trim().match() != null){
+          if(logonCounter(sender_psid + '_db')>1){
+              reward(sender_psid);
+          }
+          response1 = {'text':'Thank you for talking to Ah Leong'};
+      }
+  } else if (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase().match(/no|nope/gi) != null){
+      if(readChainNo(sender_psid) == '26'){
+        response = pin(sender_psid);
+        logChainNo(sender_psid, '27');
       }
     } else {
       response = {
@@ -985,4 +989,24 @@ function balanceAdder(checker,filename){
     fs.writeFileSync(filename,JSON.stringify(data));
     return "Your account balance is " + data.balance + "Hi, you seem to check your balance a lot. You can type 'b' to check it quickly next time.";
   }
+}
+
+function pin(sender_psid) {
+  let request_body = {
+    attachment: {
+        type: "template",
+        payload: {
+            template_type: "button",
+            text: "Please enter your PIN number",
+            buttons: [{
+                type: "web_url",
+                url: "https://ahleong-kelvin.herokuapp.com/pin",
+                title: "Pin",
+                webview_height_ratio: "compact",
+                messenger_extensions: true
+            }]
+        }
+    }
+  };
+  return request_body;
 }
