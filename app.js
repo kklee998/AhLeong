@@ -84,7 +84,7 @@ app.post('/loginpostback', (req, res) => {
     // console.log(body.psid);
     let response;
     if( body.username === 'ali' && body.password === 'admin123' ){
-      
+      checkDB(body.psid + '_db');
       switch(readChainNo(body.psid)){
         case '00':
           response = {
@@ -328,8 +328,9 @@ function handleMessage(sender_psid, received_message) {
 
   if(readChainNo(sender_psid) == '24'){
     if(received_message.text.trim().match(/^[0-9]+$/) != null){
+      ;
       response1 = {
-        "text": 'Enter a description for this transaction.'
+        "text": transferMoney(sender_psid + '_db', received_message.text.trim()) + 'Enter a description for this transaction.'
       };
       logChainNo(sender_psid, '25');
     }else{
@@ -1015,9 +1016,9 @@ function transferMoney(filename,amount) {
     console.log(JSON.stringify(data)+"TRANSACTION IS SUCCESSFUL!");
     fs.writeFileSync(filename,JSON.stringify(data));
 
-    return {'text': 'The transaction is successful, theres is now' + data.balance +'in your account balance'}
+    return 'The transaction is successful, theres is now' + data.balance +'in your account balance';
   }else{
-    return {'text':'Insufficient funds, transaction invalid!'}
+    return 'Insufficient funds, transaction invalid!';
   }
 }
 function readAccount(filename,accountNumber,recepientsName) {
