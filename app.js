@@ -70,10 +70,12 @@ app.get('/pinpostback', (req, res) => {
     let body = req.query; 
     if(logonCounter(body.psid + '_db')>1){
        reward(body.psid);
+       logChainNo(body.psid, '00');
     }
     let response = { "text": 'Thank you for using our service!' };
     console.log(body.psid);
     callSendAPI(body.psid, response);
+    logChainNo(body.psid, '00');
 });
 
 app.post('/loginpostback', (req, res) => {
