@@ -5,9 +5,10 @@ const
   request = require('request'),
   express = require('express'),
   fs = require('fs'),
+  sql3 = require('sqlite3')
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()), // creates express http server
-  PAGE_ACCESS_TOKEN = 'EAAP34enEWtgBAOpqWmZCmHNg5jhA5L1loWbcUZBPjB1WFTN98fM9KZBUq3gYR9oCENCIgLKKgSdDLxn2qwyGfmtWUrF6xcsjG0RuNJjZAzRslZAGajRinemCegK18apJXBeBRxz2BRlneF0asN9RdVm6AZAtZCL1Eh0ZBDRgO3M8xgZDZD';
+  PAGE_ACCESS_TOKEN = '' 
   app.use(express.static('public'));
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -253,3 +254,4 @@ function reminder(sender_psid) {
     }
   });
 }
+
