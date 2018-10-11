@@ -15,6 +15,7 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'Messenger'));
     window.extAsyncInit = () => {
+
         // TODO: How to parse env file from here?
         MessengerExtensions.getSupportedFeatures(function success(result) {
             let features = result.supported_features;
@@ -95,18 +96,14 @@
     <div style="margin-left:675px;position:relative;color:#fff;right:110px;bottom:75px;font-size: 40px;font-family:Arial, Helvetica, sans-serif;">
         <label>Online Banking</label>
     </div>
-    <form action="/loginpostback" method="post">
+    <form action="/pinpostback" method="get" name="form1"> 
         <input type="hidden" name="psid" id="sender_psid"><br>
         <div class="span">
-            <label>ONLINE BANKING SECURED LOGIN</label>
+            <label>Enter PIN Number</label>
         </div>
-        <input type="hidden" name="username" value="ali" ><br>
+        <input class="box" type="text"  name="pincode" maxlength="4"  id="pin" pattern="\d{4}" required/>
         <br>
-        <input class="box" type="password" name="password" placeholder="Password" value="admin123"><br>
-        <br>
-        <input class="button" type="submit" value="Submit" id="submitButton">
-        <br>
-        <input class="button" style="background-color: grey; color :ghostwhite" type="submit" value="Register">
+        <input class="button" type="Submit" value="Submit" id="submitButton"/> 
     </form>
 </div>
 </body>
