@@ -1,0 +1,10 @@
+{
+    "sender_psid" : "",
+    "logon" : 0,
+    "balance" : 1000,
+    "frequency" : 0,
+    "recepients" : {
+        "acc" : "6969420",
+        "name": "ali"
+    }
+}
